@@ -1,11 +1,9 @@
 import CartItem from "../components/CartItem";
 import Navbar from "../components/Navbar";
 import { useFetchLocalCart } from "../hooks/cart";
-import { calculateTotalPrice } from "../utils/cart";
-
 
 export default function Cart() {
-  const { data: products, isLoading, error } = useFetchLocalCart();
+  const { data: products, totalPrice, isLoading, error } = useFetchLocalCart();
 
   if (isLoading || error) {
     return <>Loading...</>
@@ -40,7 +38,7 @@ export default function Cart() {
           />
         ))}
         <div>
-          <h2>Total: {calculateTotalPrice(products)}</h2>
+          <h2>Total: {totalPrice}</h2>
         </div>
       </div>
     )

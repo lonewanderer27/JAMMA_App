@@ -6,8 +6,16 @@ export function findInCart(localCart: LocalCart[], product_id: number) {
   return localCart.find((item) => item.product_id === product_id);
 }
 
-export function calculateTotalPrice(products: Product[]) {
-  return phpString.format(products.reduce((acc, product) => acc + product.price, 0))
+export function calculateTotalPrice(products: Product[], localCart: LocalCart[]) {
+  return phpString.format(localCart.reduce((acc, item) => {
+    const product = products.find((product) => product.id === item.product_id);
+    if (product) {
+      return acc + (product.price * item.quantity);
+    } else {
+      return acc;
+    }
+  }
+  , 0));
 }
 
 export function addQuantity(

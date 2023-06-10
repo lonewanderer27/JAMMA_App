@@ -62,6 +62,14 @@ export const cartState = atom<Cart[] | []>({
   ]
 })
 
+export const localCartPriceState = atom<string>({
+  key: 'localCartPrice',
+  default: '',
+  effects: [
+    ({ onSet }) => onSet((newLocalCartPrice) => log("localCartPrice", newLocalCartPrice))
+  ]
+})
+
 export const localCartState = atom<LocalCart[] | []>({
   key: 'localCart',
   default: [],
