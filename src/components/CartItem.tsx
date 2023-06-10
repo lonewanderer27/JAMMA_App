@@ -1,4 +1,5 @@
-import { Button, ButtonGroup, Card, CardBody, CardFooter, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import { Button, ButtonGroup, Card, CardBody, CardFooter, Heading, Image, Stack, Text, IconButton } from "@chakra-ui/react";
+import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { CartItemType } from "../types/jamma";
 import { phpString } from "../utils/phpString";
 import { useNavigate } from "react-router-dom";
@@ -47,19 +48,21 @@ export default function CartItem(props: CartItemType) {
             </Text>
             <ButtonGroup size='sm'>
               <Text>Qty: </Text>
-              <Button 
+              <IconButton 
+                aria-label="Minus"
                 variant='solid' 
                 colorScheme="blue"
                 onClick={() => handleMinus()}
-              >
-                -
-              </Button>
+                icon={<MinusIcon/>}
+              />
               <Text py='1'>{cartItem.quantity}</Text>
-              <Button variant='solid' colorScheme="blue"
+              <IconButton 
+                aria-label="Add"
+                variant='solid' 
+                colorScheme="blue"
                 onClick={() => handleAdd()}
-              >
-                +
-              </Button>
+                icon={<AddIcon/>}
+              />
             </ButtonGroup>
             <Text py='1'>
               Subtotal Price: {phpString.format(props.subprice * cartItem.quantity)}
