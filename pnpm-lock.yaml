@@ -76,7 +76,7 @@ devDependencies:
     specifier: ^0.3.4
     version: 0.3.4(eslint@8.38.0)
   supabase:
-    specifier: '>=1.8.1'
+    specifier: ^1.64.8
     version: 1.64.8
   typescript:
     specifier: ^5.0.2
