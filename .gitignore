@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# IDE - VSCode
+.vscode/*
+
+.env

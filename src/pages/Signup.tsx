@@ -1,9 +1,11 @@
 import {Link} from 'react-router-dom';
-import { credInputState } from '../atoms';
+import { credInputState } from '../atoms/atoms';
 import { useRecoilState } from 'recoil';
 import Navbar from "../components/Navbar";
 import '../App.css' 
 import { addUser } from '../utils/user';
+import { Input, Button, Stack, Heading } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 export default function Signup(){
   const [credInput, setCredInput] = useRecoilState(credInputState);
@@ -27,30 +29,35 @@ export default function Signup(){
     }
   }
 
+  useEffect(() => {
+    document.title = "Signup"
+  }, [])
+
   return (
     <div>
-      <Navbar/>
-      <h1>Signup</h1>
-      <input
-        placeholder="Full Name"
-        type="text"
-        name="fullname"
-        onChange={handleChange}
-      />
-      <input
-        placeholder="username@email.com"
-        type="email"
-        name="email"
-        onChange={handleChange}
-      />
-      <input
-        placeholder="password"
-        type="password"
-        name="password"
-        onChange={handleChange}
-      />
-      <button onClick={() => handleSubmit()}>Signup</button>
-      <Link to="/login"><button>Login</button></Link>
+      <Heading>Signup</Heading>
+      <Stack>
+        <Input
+          placeholder="Full Name"
+          type="text"
+          name="fullname"
+          onChange={handleChange}
+        />
+        <Input
+          placeholder="username@email.com"
+          type="email"
+          name="email"
+          onChange={handleChange}
+        />
+        <Input
+          placeholder="password"
+          type="password"
+          name="password"
+          onChange={handleChange}
+        />
+      </Stack>
+      <Button onClick={() => handleSubmit()}>Signup</Button>
+      <Link to="/login"><Button>Login</Button></Link>
     </div>
   )
 }

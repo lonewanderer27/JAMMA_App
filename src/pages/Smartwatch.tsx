@@ -1,30 +1,24 @@
+import { useRecoilValue } from "recoil";
+import Loading from "../components/Loading";
 import Navbar from "../components/Navbar"
-import ProductCard from "../components/ProductCard";
+import XlProductCard from "../components/ProductCards/XlProductCard";
 import { useFetchProducts } from "../hooks/products";
-import { Categories } from "../types/jamma";
+import { Categories, CategoriesID } from "../types/jamma";
+import { productsAtom } from "../atoms/products";
+import { Heading, SimpleGrid } from "@chakra-ui/react";
+import SmProductCard from "../components/ProductCards/SmProductCard";
 
 export default function Smartwatch(){
-  const { data: products, isLoading, error } = useFetchProducts(Categories.Smartwatch);
+  const products = useRecoilValue(productsAtom(CategoriesID.Smartwatch));
 
   return (
-    <div>
-      <Navbar/>
-      <h1>Smartwatches</h1>
-      {products !== undefined && products.map((product) => (
-        <ProductCard 
-          key={product.id} 
-          brand_id={product.brand_id} 
-          category_id={product.category_id} 
-          description={product.description} 
-          id={product.id} 
-          image_url={product.image_url} 
-          last_stock={product.last_stock} 
-          name={product.name} 
-          price={product.price} 
-          stock={product.stock} 
-          video_url={product.video_url}          
-        />
-      ))}
-    </div>
+    <Loading>
+      <Heading>Smartwatches</Heading>
+      <SimpleGrid columns={{base: 2, sm: 3, lg: 6}} gap={5}>
+        {products !== undefined && products.map((product) => (
+          <SmProductCard key={product.id} {...product} />
+        ))}
+      </SimpleGrid>
+    </Loading>
   )
 }

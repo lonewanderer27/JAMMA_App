@@ -1,16 +1,16 @@
 import '../App.css'
 
-import { Link, useNavigate } from 'react-router-dom';
-import { credInputState, sessionState, userState } from '../atoms';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { credInputState, sessionState, profileState } from '../atoms/atoms';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-
-import Navbar from '../components/Navbar';
+import { Input, Button, HStack, Heading } from '@chakra-ui/react';
 import { loginUser } from '../utils/user';
+import { nextUrl } from '../hooks/misc';
 
 export default function Login(){
+  const searchParams = new URLSearchParams(location.search);
   const [cred, setCred] = useRecoilState(credInputState);
   const setSession = useSetRecoilState(sessionState);
-  const setUser = useSetRecoilState(userState);
 
   const navigate = useNavigate();
 
@@ -23,37 +23,44 @@ export default function Login(){
 
   async function handleSubmit() {
     const {data, error} = await loginUser(cred);
-
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (error) {
-      console.log(error.message)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      console.log(error!.message)
     } else {
       console.log("Login success!");
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       setSession(data.session!);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      setUser(data.user!);
-      navigate("/");
+      location.pathname = nextUrl("/");
+      searchParams.delete("next");
     }
   }
 
   return (
     <div>
-      <Navbar/>
-      <h1>Login</h1>
-      <input
-        placeholder="username@email.com"
-        type="email"
-        name="email"
-        onChange={handleChange}
-      />
-      <input
-        placeholder="password"
-        type="password"
-        name="password"
-        onChange={handleChange}
-      />
-      <button onClick={() => handleSubmit()}>Login</button>
-      <button>Don't have an account yet? <Link to="/signup">Signup</Link></button>
+      <Heading>Login</Heading>
+      <HStack gap={3}>
+        <Input
+          placeholder="username@email.com"
+          type="email"
+          name="email"
+          onChange={handleChange}
+        />
+        <Input
+          placeholder="password"
+          type="password"
+          name="password"
+          onChange={handleChange}
+        />
+      </HStack>
+      <HStack gap={3}>
+        <Button onClick={() => handleSubmit()}>Login</Button>
+        <Link to={"/signup"}>
+          <Button>
+            Don't have an account yet? Signup
+          </Button>
+        </Link>
+      </HStack>
     </div>
   )
 }

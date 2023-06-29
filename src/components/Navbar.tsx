@@ -1,4 +1,4 @@
-import { AddIcon, CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import BasketIcon from 'bootstrap-icons/icons/basket3-fill.svg'
 import {
   Avatar,
@@ -19,18 +19,16 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
-import { localCartState, sessionState, userState } from '../atoms';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-
+import { sessionState, profileState } from '../atoms/atoms';
+import { cartAtom } from "../atoms/cart";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import { ReactNode } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { countCart } from '../utils/cart';
+import Loading from './Loading';
 
-// import { JSession } from '../types/jamma';
-
-
-const Links = ['All Products', 'Earphone', 'Smartwatch', 'About'];
-const RouteLinks = ['/', '/earphone', '/smartwatch', '/about'];
+const Links = ['All Products', 'Earphone', 'Smartwatch', 'Accessory', 'About'];
+const RouteLinks = ['/', '/earphone', '/smartwatch', '/accessory', '/about'];
 
 const NavLink = ({ children, to }: { children: ReactNode, to:string }) => (
   <Link
@@ -52,18 +50,16 @@ export default function Navbar(){
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [session, setSession] = useRecoilState<Session | undefined>(sessionState);
-  // const cart = useRecoilValue(cartState);
-  const setUser = useSetRecoilState(userState);
+  const { state, contents: profile } = useRecoilValueLoadable(profileState);
 
-  const cart = useRecoilValue(localCartState);
+  const cart = useRecoilValue(cartAtom);
 
   function handleLogout() {
     setSession(undefined);
-    setUser(undefined);
   }
 
-  function handleRegister(){
-    navigate('/register');
+  function handleSignup(){
+    navigate('/signup');
   }
 
   function handleLogin(){
@@ -71,7 +67,7 @@ export default function Navbar(){
   }
 
   function handleOrder() {
-    navigate('/orders')
+    navigate('/my_orders')
   }
 
   function handleMessages() {
@@ -82,10 +78,14 @@ export default function Navbar(){
     navigate('/me')
   }
 
+  function handleRecentlyViewed(){
+    navigate('/recently_viewed')
+  }
+
   const navigate = useNavigate();
 
   return (
-    <>
+    <Loading loading={state === 'loading'} fullScreen={false}>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton
@@ -115,7 +115,7 @@ export default function Navbar(){
               rightIcon={<Image src={BasketIcon} />}
               onClick={() => navigate('/cart')}
             >
-              {countCart(cart)}
+              {countCart(cart, false)}
             </Button>
             <Menu>
               <MenuButton
@@ -126,23 +126,21 @@ export default function Navbar(){
                 minW={0}>
                 <Avatar
                   size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
+                  src={profile?.avatar_url}
                 />
               </MenuButton>
               <MenuList>
                 {!session ? 
                   <>
                     <MenuItem onClick={() => handleLogin()}>Log In</MenuItem> 
-                    <MenuItem onClick={() => handleRegister()}>Register</MenuItem> 
+                    <MenuItem onClick={() => handleSignup()}>Signup</MenuItem> 
                   </> :
-                  <MenuItem onClick={() => handleProfile()}>{session.user.user_metadata["full_name"]}</MenuItem>}
-                <MenuDivider/>
+                  <MenuItem onClick={() => handleProfile()}>{profile.full_name}</MenuItem>}
                 {session && <>
+                  <MenuDivider/>
                   <MenuItem onClick={() => handleOrder()}>My Orders</MenuItem>
                   <MenuItem onClick={() => handleMessages()}>My Messages</MenuItem>
-                  <MenuItem>Recently Viewed</MenuItem>
+                  <MenuItem onClick={() => handleRecentlyViewed()}>Recently Viewed</MenuItem>
                   <MenuDivider />
                   <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
                 </>}
@@ -161,6 +159,6 @@ export default function Navbar(){
           </Box>
         ) : null}
       </Box>
-    </>
+    </Loading>
   )
 }

@@ -1,66 +1,50 @@
 import '../App.css'
 
-import { sessionState, userState } from '../atoms';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { sessionState } from '../atoms/atoms';
+import { useRecoilValue } from 'recoil';
 
 import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar';
-import ProductCard from '../components/ProductCard';
-import { useFetchProducts }from '../hooks/products';
+import XlProductCard from '../components/ProductCards/XlProductCard';
+import { Box, Button, HStack, Heading, SimpleGrid } from '@chakra-ui/react';
+import { productsAtom } from '../atoms/products';
+import Loading from '../components/Loading';
+import SmProductCard from '../components/ProductCards/SmProductCard';
 
 export default function Home() {
-  const [session, setSession] = useRecoilState(sessionState);
-  const { data: products, isLoading, error } = useFetchProducts();
-  
-  const setUser = useSetRecoilState(userState);
-
-  function handleLogout() {
-    setSession(undefined);
-    setUser(undefined);
-  }
+  const session = useRecoilValue(sessionState);
+  const products = useRecoilValue(productsAtom(undefined));
+  document.title = "All Products - JAMMA"
 
   return (
-    <>
-      <Navbar/>
-      {session !== undefined && <h1>Welcome User</h1>}
-      {session === undefined && <h1>Homepage!</h1>}
-      <div className="card">
+    <Loading fullScreen={true}>
+      <Heading>
+        All Products
+      </Heading>
+      {/* <Box>
         {session === undefined && <>
-          <Link to="login">
-            <button>
-              Login
-            </button>
-          </Link>
-          <Link to="signup">
-            <button>
-              Signup
-            </button>
-          </Link>
+          <HStack>
+            <Link to="login">
+              <Button>
+                Login
+              </Button>
+            </Link>
+            <Link to="signup">
+              <Button>
+                Signup
+              </Button>
+            </Link>
+          </HStack>
         </>}
-        {session !== undefined && 
-          <button onClick={() => handleLogout()}>
-            Logout
-          </button>}
-      </div>
-      {session === undefined && <p className="read-the-docs">
+      </Box> */}
+      {/* {session === undefined && <p className="read-the-docs">
         It looks like you're not logged in yet. <br/>
         Click the button above to do so!
-      </p>}
-      {products !== undefined && products.map((product) => (
-        <ProductCard 
-          key={product.id} 
-          brand_id={product.brand_id} 
-          category_id={product.category_id} 
-          description={product.description} 
-          id={product.id} 
-          image_url={product.image_url} 
-          last_stock={product.last_stock} 
-          name={product.name} 
-          price={product.price} 
-          stock={product.stock} 
-          video_url={product.video_url}          
-        />
-      ))}
-    </>
+      </p>} */}
+      <SimpleGrid columns={{base: 2, sm: 3, lg: 6}} gap={5}>
+        {products !== undefined && products.map((product) => (
+          <SmProductCard key={product.id} {...product} />
+        ))}
+      </SimpleGrid>
+    </Loading>
   )
 }
