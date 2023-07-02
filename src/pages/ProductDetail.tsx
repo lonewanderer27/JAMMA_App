@@ -6,6 +6,7 @@ import { Heading, Text } from "@chakra-ui/react";
 import Skeletn from "../components/Loading2";
 import { Review } from "../types/jamma";
 import Loading from "../components/Loading";
+import Reviews from "../components/Reviews";
 
 export default function ProductDetail() {
   const { product_id } = useParams<{product_id: string}>();
@@ -31,12 +32,7 @@ export default function ProductDetail() {
         <XlProductCard {...product!} />
         <Skeletn loading={reviews.isLoading} skeletonProps={{width: '100%'}}>
           {<Text>Average Rating: {averageRating}</Text>}
-          {reviews.data && reviews.data!.map((review: Review) => (
-            <div key={review.id}>
-              <Text>{'⭐'.repeat(review.product_rating)}</Text>
-              <Text>{review.comment}</Text>
-            </div>
-          ))}
+          <Reviews reviews={reviews.data as unknown as Review[]} />
         </Skeletn>
       </>
     )
