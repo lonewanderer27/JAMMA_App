@@ -1,9 +1,9 @@
-import { CategoriesID } from "../types/jamma";
+import { CategoriesID, Product } from "../types/jamma";
 import { Heading, SimpleGrid } from "@chakra-ui/react";
-import SmProductCard from "../components/ProductCards/SmProductCard";
 import { useProducts } from "../hooks/products";
 import Skeletn from "../components/Loading2";
 import SmProductCardsLoader from "../components/Loaders/SmProductCardsLoader";
+import SmProductCardGrid from "../components/ProductCards/SmProductCardGrid";
 
 export default function Accessories(){
   const {data: products, isLoading, error } = useProducts(undefined, [CategoriesID.Accessory]);
@@ -12,11 +12,7 @@ export default function Accessories(){
   return (
     <Skeletn loading={isLoading} loader={<SmProductCardsLoader/>}>
       <Heading>Accesories</Heading>
-      <SimpleGrid columns={{base: 2, sm: 3, lg: 6}} gap={5}>
-        {products != undefined && products.map((product) => (
-          <SmProductCard key={product.id} {...product} />
-        ))}
-      </SimpleGrid>
+      <SmProductCardGrid products={products as unknown as Product[]} />
     </Skeletn>
   )
 }

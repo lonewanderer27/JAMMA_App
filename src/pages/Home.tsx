@@ -1,10 +1,11 @@
 import '../App.css'
 
 import { Heading, SimpleGrid } from '@chakra-ui/react';
-import SmProductCard from '../components/ProductCards/SmProductCard';
 import { useProducts } from '../hooks/products';
 import Skeletn from '../components/Loading2';
 import SmProductCardsLoader from '../components/Loaders/SmProductCardsLoader';
+import SmProductCardGrid from '../components/ProductCards/SmProductCardGrid';
+import { Product } from '../types/jamma';
 
 export default function Home() {
   const {data: products, isLoading, error } = useProducts();
@@ -15,11 +16,7 @@ export default function Home() {
       <Heading>
         All Products
       </Heading>
-      <SimpleGrid columns={{base: 2, sm: 3, lg: 6}} gap={5}>
-        {products != undefined && products.map((product) => (
-          <SmProductCard key={product.id} {...product} />
-        ))}
-      </SimpleGrid>
+      <SmProductCardGrid products={products as unknown as Product[]} />
     </Skeletn>
   )
 }
