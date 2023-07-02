@@ -1,18 +1,16 @@
 import { Avatar, AvatarGroup, Box, Card, HStack, VStack, Skeleton, Stack, Text, CardBody, Flex, SkeletonText, CardHeader, CardFooter, Button } from "@chakra-ui/react";
-import { OrderType, Product } from "../types/jamma";
-import { useEffect, useState } from "react";
+import { OrderType } from "../../types/jamma";
 import { useNavigate } from "react-router-dom";
-import { phpString } from "../utils/phpString";
-import { useProducts } from "../hooks/products";
-import Skeletn from "./Loading2";
-import OrdersItemLoader from "./Loaders/OrdersItemLoader";
+import { phpString } from "../../utils/phpString";
+import { useProducts } from "../../hooks/products";
+import Skeletn from "../Loading2";
+import OrdersItemLoader from "../Loaders/OrdersItemLoader";
 
 export default function OrdersItem(props: OrderType) {
   const nav = useNavigate();
 
   const {data: products, error, isLoading} = useProducts(
-    props.products.products.map(product => product.product_id).slice(0, 3),
-    undefined
+    props.products.products.map(product => product.product_id).slice(0, 3)
   );
 
   return (

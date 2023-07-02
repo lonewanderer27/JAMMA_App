@@ -26,22 +26,18 @@ export function addOrder(order: Database['public']['Tables']['orders']['Insert']
 }
 
 export function getOrder(order_id: number, user_id?: string){
-  if (user_id == null) {
-    // get order without user_id
-    return client
-            .from('orders')
-            .select('*')
-            .eq('id', order_id)
-            .not('products', 'is', 'null')
-            .single()
-  } else {
-    // get order with user_id
+  if (user_id) {
     return client
             .from('orders')
             .select('*')
             .eq('id', order_id)
             .eq('user_id', user_id)
-            .not('products', 'is', 'null')
+            .single()
+  } else {
+    return client
+            .from('orders')
+            .select('*')
+            .eq('id', order_id)
             .single()
   }
 }

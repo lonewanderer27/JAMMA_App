@@ -2,14 +2,72 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { cartProductsAtom, checkoutItemsAtom, noteAtom, paymentOptionAtom, selectedVoucherAtom } from "../atoms/checkout";
 import { checkoutPricesAtom, defaultAddressAtom } from "../atoms/checkout";
 import { errorState, loadingState, profileState } from "../atoms/atoms";
-import { addOrder } from "../utils/order";
+import { addOrder, getDeliveryAddress, getOrder, getOrderStatus } from "../utils/order";
 import { orderAtom } from "../atoms/order";
 import { useRef, useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { cartAtom } from "../atoms/cart";
-import { OrderType } from "../types/jamma";
+import { OrderType, Profile } from "../types/jamma";
 import { deleteOrderedProducts } from "../utils/checkout";
+import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
+import { useEffect } from "react";
+
+export function useOrder(order_id: string, profile: Profile) {
+  const [orderAtomData, setOrderAtomData] = useRecoilState(orderAtom);
+
+  const { data: order, isLoading: orderLoading, error: orderError } = useQuery(
+    getOrder(Number(order_id), profile.id),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  const { 
+    data: deliveryAddress, 
+    isLoading: deliveryAddressLoading, 
+    error: deliveryAddressError
+  } = useQuery(
+    getDeliveryAddress(order?.delivery_address ?? -1),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  const { data: status, isLoading: statusLoading, error: statusError } = useQuery(
+    getOrderStatus(Number(order_id)),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  useEffect(() => {
+    if (order) {
+      setOrderAtomData(order as unknown as OrderType)
+    }
+  }, [order])
+
+  return {
+    order: {
+      data: order,
+      isLoading: orderLoading,
+      error: orderError
+    },
+    status: {
+      data: status,
+      isLoading: statusLoading,
+      error: statusError
+    },
+    deliveryAddress: {
+      data: deliveryAddress,
+      isLoading: deliveryAddressLoading,
+      error: deliveryAddressError
+    }
+  }
+}
 
 export function usePlaceOrder() {
   const [loading, setLoading] = useRecoilState(loadingState);

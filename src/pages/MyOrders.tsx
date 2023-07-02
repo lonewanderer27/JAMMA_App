@@ -4,7 +4,7 @@ import { useRecoilValueLoadable } from "recoil"
 import { profileState } from "../atoms/atoms"
 import { useResetNextParam } from "../hooks/misc"
 import { Tab, TabList, Tabs } from "@chakra-ui/react";
-import AllOrders from "../components/AllOrders"
+import AllOrders from "../components/Order/AllOrders"
 
 export default function MyOrders(){
   document.title = "My Orders - JAMMA"

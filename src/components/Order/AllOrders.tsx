@@ -1,9 +1,9 @@
 import { Box,  Input, InputGroup, InputLeftElement, TabPanel } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useRecoilValue } from "recoil";
-import { ordersAtom } from "../atoms/orders";
+import { ordersAtom } from "../../atoms/orders";
 import OrdersItem from "./OrdersItem";
-import Loading from "./Loading";
+import Loading from "../Loading";
 
 export default function AllOrders() {
   const orders = useRecoilValue(ordersAtom);

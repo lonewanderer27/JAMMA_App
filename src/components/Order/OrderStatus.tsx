@@ -23,6 +23,67 @@ import { deliveryStatuses } from '../../constants'
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import { orderAddress, orderAtom, orderStatus } from '../../atoms/order'
 import Skeletn from '../Loading2';
+import { DeliveryAddress, OrderStatus, OrderType } from '../../types/jamma';
+import { useOrder } from '../../hooks/order';
+import { useParams } from 'react-router-dom';
+import { profileState } from '../../atoms/atoms';
+import DeliveryAddressLoader from '../Loaders/DeliveryAddressLoader';
+
+export function OrderStatus2() {
+  const { order_id } = useParams<{order_id: string}>();
+  const profile = useRecoilValueLoadable(profileState);
+  const { order, status, deliveryAddress } = useOrder(order_id!, profile.contents);
+
+  return (
+    <Card>
+      <CardBody>
+        <Box pb={5}>
+          <Stepper index={0}>
+            {deliveryStatuses.map((step, index) => (
+              <Step key={index}>
+              <Flex flexDir="column" alignItems={'center'}>
+                <StepIndicator>
+                  <StepStatus
+                    complete={<StepIcon/>}
+                    incomplete={<StepNumber/>}
+                    active={<StepNumber/>}
+                  />
+                </StepIndicator>
+
+                <Box pt={2}>
+                  <StepTitle>{step.title}</StepTitle>
+                  <StepDescription>{step.description}</StepDescription>
+                </Box>
+
+                
+              </Flex>
+              <StepSeparator />
+            </Step>))}
+          </Stepper>
+        </Box>
+        <Box>
+          <Heading size='md' mb={5}>Delivery Address</Heading>
+          <SimpleGrid columns={{sm: 1, md: 2}}>
+            <Skeletn loading={deliveryAddress.isLoading} loader={<DeliveryAddressLoader/>}>
+              {deliveryAddress.data != undefined && 
+              <Stack gap={1}>
+                <Text fontSize='lg'>{deliveryAddress.data.name}</Text>
+                <Text fontSize='lg'>{deliveryAddress.data.phone_number}</Text>
+                <Text fontSize='lg'>{deliveryAddress.data.address_line2}, {deliveryAddress.data.barangay}</Text>
+                <Text fontSize='lg'>{deliveryAddress.data.city}, {deliveryAddress.data.province}, {deliveryAddress.data.postal_code}</Text>
+                {(order.data != undefined && order.data.note != undefined) &&
+                (<><Text fontWeight='bold'>Note:</Text><Text>{order?.data.note}</Text></>)}
+              </Stack>}
+            </Skeletn>
+            <Box>
+
+            </Box>
+          </SimpleGrid>
+        </Box>
+      </CardBody>
+    </Card>
+  )
+}
 
 export default function OrderStatus(){
 

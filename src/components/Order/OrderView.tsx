@@ -1,58 +1,81 @@
-import { Box, Heading, Text, Badge, Stack, Card, CardBody } from "@chakra-ui/react";
-import { useRecoilState, useRecoilValueLoadable } from "recoil";
-import { orderStatus, orderAtom, orderedProducts, paymentOption, paymentStatus } from "../../atoms/order";
+import { Heading, Card, CardBody } from "@chakra-ui/react";
+import { useRecoilValueLoadable } from "recoil";
+import { orderedProducts } from "../../atoms/order";
 import Skeletn from "../Loading2";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { getOrder } from "../../utils/order";
 import { profileState } from "../../atoms/atoms";
-import { OrderType } from "../../types/jamma";
+import { DeliveryAddress, OrderStatus, OrderType } from "../../types/jamma";
 import OrderedProducts from "./OrderedProducts";
-import NotFound from "../../pages/NotFound";
-import OrderStatus from "./OrderStatus";
+import { useOrder } from "../../hooks/order";
+import { OrderStatus2 } from "./OrderStatus";
 
 export default function OrderView() {
-  const { order_id } = useParams();
-  const [order, setOrder] = useRecoilState(orderAtom);
+  const { order_id } = useParams<{order_id: string}>();
   const profile = useRecoilValueLoadable(profileState);
-  const ds = useRecoilValueLoadable(orderStatus);
-  const po = useRecoilValueLoadable(paymentOption);
-  const ps = useRecoilValueLoadable(paymentStatus);
-  const {contents: op, state: opState} = useRecoilValueLoadable(orderedProducts);
-
-  useEffect(() => {
-    if (order_id != null && 
-        profile.contents.id != null
-    ) {
-      console.log("Order ID: ", order_id);
-      (async () => {
-        setOrder((await getOrder(Number(order_id), profile.contents.id)).data as unknown as OrderType)
-      })();
-      document.title = `Order Id. ${order_id}`;
-    }
-  }, [order_id, profile])
-
-  console.log("Order: ", order);
-
-  if (order) {
-    return (
-      <Box>
-        <Card>
-          <CardBody>
-            <Heading size='md'>
-              Order Id. {order.id}
-            </Heading>
-          </CardBody>
-        </Card>
-        <OrderStatus/>
-        <Skeletn state={opState}>
-          <OrderedProducts order={order} orderedProducts={op} />
-        </Skeletn>
-      </Box>
-    )
-  } else {
-    return (
-      <NotFound/>
-    )
-  }
+  const { order } = useOrder(order_id!, profile.contents);
+  const products = useRecoilValueLoadable(orderedProducts);
+  
+  return (
+    <Skeletn loading={order.isLoading} skeletonProps={{width: '100%'}}>
+      <Card>
+        <CardBody>
+          <Heading size='md'>Order Id. {order.data?.id}</Heading>
+          <OrderStatus2 />
+          <Skeletn state={products.state}>
+            {products.contents != undefined && 
+            <OrderedProducts 
+              order={order?.data as unknown as OrderType} 
+              orderedProducts={products.contents}
+            />}
+          </Skeletn>
+        </CardBody>
+      </Card>
+    </Skeletn>
+  )
 }
+
+// export function OrderView() {
+//   const { order_id } = useParams();
+//   const [order, setOrder] = useRecoilState(orderAtom);
+//   const profile = useRecoilValueLoadable(profileState);
+//   const ds = useRecoilValueLoadable(orderStatus);
+//   const po = useRecoilValueLoadable(paymentOption);
+//   const ps = useRecoilValueLoadable(paymentStatus);
+//   const {contents: op, state: opState} = useRecoilValueLoadable(orderedProducts);
+
+//   useEffect(() => {
+//     if (order_id != null && 
+//         profile.contents.id != null
+//     ) {
+//       console.log("Order ID: ", order_id);
+//       (async () => {
+//         setOrder((await getOrder(Number(order_id), profile.contents.id)).data as unknown as OrderType)
+//       })();
+//       document.title = `Order Id. ${order_id}`;
+//     }
+//   }, [order_id, profile])
+
+//   console.log("Order: ", order);
+
+//   if (order) {
+//     return (
+//       <Box>
+//         <Card>
+//           <CardBody>
+//             <Heading size='md'>
+//               Order Id. {order.id}
+//             </Heading>
+//           </CardBody>
+//         </Card>
+//         <OrderStatus/>
+//         <Skeletn state={opState}>
+//           <OrderedProducts order={order} orderedProducts={op} />
+//         </Skeletn>
+//       </Box>
+//     )
+//   } else {
+//     return (
+//       <NotFound/>
+//     )
+//   }
+// }
