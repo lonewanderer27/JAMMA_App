@@ -52,6 +52,7 @@ export function getOrders(user_id: string){
           .select('*')
           .eq('user_id', user_id)
           .not('products', 'is', 'null')
+          .order('order_date', { ascending: false })
 }
 
 export function getOrdersStatus(id: number){

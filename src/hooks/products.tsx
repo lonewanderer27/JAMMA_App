@@ -1,10 +1,90 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useState } from "react"
 import { client } from "../client";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { errorState, loadingState } from "../atoms/atoms";
 import { productState, productsState } from "../atoms/products";
 import { Categories } from "../types/jamma";
-import { fetchProduct } from "../utils/products";
+import { fetchProduct, getReviews } from "../utils/products";
+import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
+
+export const useReview = (id: string) => {
+  const [averageRating, setAverageRating] = useState(() => 0);
+  const { data: productReviews, error: reviewsError, isLoading: reviewsLoading } = useQuery(
+    getReviews(id),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  useEffect(() => {
+    if (productReviews != undefined) {
+      setAverageRating(
+        Math.round(productReviews.reduce((acc, cur) => acc + cur.product_rating, 0) / productReviews.length)
+      );
+    } else {
+      setAverageRating(0);
+    }
+  }, [productReviews])
+
+  return {
+    reviews: {
+      data: productReviews,
+      error: reviewsError,
+      isLoading: reviewsLoading
+    },
+    averageRating
+  }
+}
+
+export const useProduct = (id: string) => {
+  const [data, setData] = useRecoilState(productState);
+  const { data: productData, error, isLoading } = useQuery(
+    client
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single(),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  useEffect(() => {
+    if (productData) {
+      setData(productData);
+    }
+  }, [productData])
+
+  return {
+    data,
+    error,
+    isLoading
+  }
+}
+
+export const useProducts = (
+  ids?: string[] | number[],
+  categoryId?: string[] | number[]
+) => {
+  const query = client
+    .from('products')
+    .select('*');
+
+  if (ids) {
+    query.in('id', ids);
+  }
+
+  if (categoryId) {
+    query.in('category_id', categoryId);
+  }
+
+  return useQuery(query, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+};
 
 export const useFetchProducts = (category: Categories = Categories.All) => {
   const [data, setData] = useRecoilState(productsState);

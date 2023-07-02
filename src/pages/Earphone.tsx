@@ -1,24 +1,22 @@
-import { useRecoilValue, useRecoilValueLoadable } from "recoil";
-import { productsAtom } from "../atoms/products";
-import Navbar from "../components/Navbar"
-import XlProductCard from "../components/ProductCards/XlProductCard";
-import { Categories, CategoriesID } from "../types/jamma";
-import Loading from "../components/Loading";
+import { CategoriesID } from "../types/jamma";
 import { Heading, SimpleGrid } from "@chakra-ui/react";
 import SmProductCard from "../components/ProductCards/SmProductCard";
+import { useProducts } from "../hooks/products";
+import Skeletn from "../components/Loading2";
+import SmProductCardsLoader from "../components/Loaders/SmProductCardsLoader";
 
 export default function Earphone(){
-  const products = useRecoilValue(productsAtom(CategoriesID.Earphone));
+  const {data: products, isLoading, error } = useProducts(undefined, [CategoriesID.Earphone]);
   document.title = "Earphones - Jamma"
 
   return (
-    <Loading>
+    <Skeletn loading={isLoading} loader={<SmProductCardsLoader/>}>
       <Heading>Earphones</Heading>
       <SimpleGrid columns={{base: 2, sm: 3, lg: 6}} gap={5}>
-        {products !== undefined && products.map((product) => (
+        {products != undefined && products.map((product) => (
           <SmProductCard key={product.id} {...product} />
         ))}
       </SimpleGrid>
-    </Loading>
+    </Skeletn>
   )
 }

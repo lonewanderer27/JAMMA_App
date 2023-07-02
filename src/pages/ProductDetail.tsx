@@ -1,40 +1,37 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useParams } from "react-router-dom"
 import XlProductCard from "../components/ProductCards/XlProductCard";
-import { useFetchProduct } from "../hooks/products";
+import { useProduct, useReview } from "../hooks/products";
 import { Heading, Text } from "@chakra-ui/react";
-import { useRecoilValueLoadable } from "recoil";
-import { averageRating, productReviews } from "../atoms/products";
 import Skeletn from "../components/Loading2";
 import { Review } from "../types/jamma";
 import Loading from "../components/Loading";
 
-export default function ProductDetail(){
-  const { product_id } = useParams();
-  const { data: ProductData, error, isLoading } = useFetchProduct(product_id!);
-  const pr = useRecoilValueLoadable(productReviews);
-  const ave_rating = useRecoilValueLoadable(averageRating);
-  
-  if (error || isLoading || ProductData === null) {
+export default function ProductDetail() {
+  const { product_id } = useParams<{product_id: string}>();
+  const { data: product, 
+          error: productError, 
+          isLoading: productLoading } = useProduct(product_id!);
+  const { reviews, averageRating } = useReview(product_id!);
+
+  if (productError || productLoading || product === null) {
     return (
       <>
-        {isLoading && 
-          <Loading loading={isLoading} circle={true}>
-            <></>  
+        {productLoading &&
+          <Loading loading={productLoading} circle={true}>
+            
           </Loading>}
-        {error && <Heading>Error</Heading>}
+        {productError && <Heading>Error</Heading>}
       </>
     )
   } else {
-    document.title = `${ProductData.name}`;
+    document.title = `${product!.name}`;
     return (
       <>
-        <XlProductCard {...ProductData} />
-        <Skeletn state={ave_rating.state} skeletonProps={{width: '50%'}}>
-          <Text>Average Rating: {ave_rating.contents}</Text>
-        </Skeletn>
-        <Skeletn state={pr.state} skeletonProps={{width: '100%'}}>
-          {pr.state == 'hasValue' && pr.contents!.map((review: Review) => (
+        <XlProductCard {...product!} />
+        <Skeletn loading={reviews.isLoading} skeletonProps={{width: '100%'}}>
+          {<Text>Average Rating: {averageRating}</Text>}
+          {reviews.data && reviews.data!.map((review: Review) => (
             <div key={review.id}>
               <Text>{'⭐'.repeat(review.product_rating)}</Text>
               <Text>{review.comment}</Text>
@@ -43,5 +40,5 @@ export default function ProductDetail(){
         </Skeletn>
       </>
     )
-  }  
+  }
 }

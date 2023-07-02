@@ -2,27 +2,22 @@ import { Avatar, AvatarGroup, Box, Card, HStack, VStack, Skeleton, Stack, Text, 
 import { OrderType, Product } from "../types/jamma";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getOrderedProducts } from "../utils/order";
 import { phpString } from "../utils/phpString";
+import { useProducts } from "../hooks/products";
+import Skeletn from "./Loading2";
+import OrdersItemLoader from "./Loaders/OrdersItemLoader";
 
 export default function OrdersItem(props: OrderType) {
   const nav = useNavigate();
 
-  const [products, setProducts] = useState<Product[]>(() => [])
+  const {data: products, error, isLoading} = useProducts(
+    props.products.products.map(product => product.product_id).slice(0, 3),
+    undefined
+  );
 
-  useEffect(() => {
-    const getProducts = async () => {
-      if (props.products.products.length > 0) {
-        const {data} = await getOrderedProducts(props.products.products.map(product => product.product_id).slice(0, 3));
-        setProducts(data ?? []);
-      }
-    }
-    getProducts();
-  }, [])
-
-  if (products.length != 0) {
-    return (
-      <Card 
+  return (
+    <Skeletn loading={isLoading} loader={<OrdersItemLoader {...props} />}>
+      {products != undefined && <Card 
         onClick={() => nav(`/my_orders/${props.id}`)}
         marginY={5}
         borderRadius={0}
@@ -56,7 +51,7 @@ export default function OrdersItem(props: OrderType) {
           <Stack marginY={5}>
             <Text>{products[0].name} x{props.products.products[0].quantity}</Text>
             {props.products.products.length > 1 && (
-              <Text>and {products.length - 2} more</Text>
+              <Text>and {props.products.products.length - 1} more</Text>
             )}
             <Text>Order Total: {phpString.format(props.total_payment_discounted)}</Text>
           </Stack>
@@ -72,29 +67,7 @@ export default function OrdersItem(props: OrderType) {
             <Button borderRadius={0} colorScheme='blue'>View Order</Button>
           </HStack>
         </CardFooter>
-      </Card>
-    )
-  }
-
-  return (
-    <Card
-      marginY={5}
-      borderRadius={0}
-    >
-      <CardBody display="flex" flexDir="column">
-        <HStack marginY={1}>
-          {props.products.products.map(() => (
-            <Skeleton borderRadius={0} height="100px" width="100px"/>
-          )) }
-        </HStack>
-
-        <SkeletonText 
-          noOfLines={3} 
-          spacing={2} 
-          skeletonHeight={'20px'}
-          marginY={1}
-        />
-      </CardBody>
-    </Card>
+      </Card>}
+    </Skeletn>
   )
 }

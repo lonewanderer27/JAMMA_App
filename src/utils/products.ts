@@ -1,3 +1,4 @@
+import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
 import { client } from "../client";
 import { CategoriesID } from "../types/jamma";
 import { getSession } from "./user";
@@ -57,10 +58,10 @@ export const fetchProduct = async (product_id: string) => {
   }
   console.log("user_id is not present, logging...")
   return client.from('products').select('*').eq('id', product_id).single();
-} 
+}
 
 // contains all reviews
-export const getReviews = (product_id: number) => {
+export const getReviews = (product_id: number | string) => {
   return client.from('reviews').select('*').eq('product_id', product_id);
 }
 

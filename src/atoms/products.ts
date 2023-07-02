@@ -81,3 +81,11 @@ export const recentlyViewedProducts = selector<Product[] | []>({
     return data as Product[];
   }
 })
+
+
+// this atom is used to cache products
+// so that we don't have to fetch them again from supabase every time
+export const productsCache = atom<Product[] | []>({
+  key: 'products/cache',
+  default: []
+})
