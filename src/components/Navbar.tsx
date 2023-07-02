@@ -26,6 +26,7 @@ import { ReactNode } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { countCart } from '../utils/cart';
 import Loading from './Loading';
+import Logo from '../assets/logo.png'
 
 const Links = ['All Products', 'Earphone', 'Smartwatch', 'Accessory', 'About'];
 const RouteLinks = ['/', '/earphone', '/smartwatch', '/accessory', '/about'];
@@ -96,7 +97,10 @@ export default function Navbar(){
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={'center'}>
-            <Box>Logo</Box>
+            <Image
+              src={Logo}
+              boxSize="50px"
+            />
             <HStack
               as={'nav'}
               spacing={4}
