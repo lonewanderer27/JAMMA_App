@@ -25,7 +25,7 @@ export default function SmProductCard(
         <Text>{props.name}</Text>
         <Flex justifyContent={'space-between'} marginTop={5}>
           <Text>{phpString.format(props.price)}</Text>
-          <Text>{props.stock} Rem.</Text>
+          <Text>{props.sales} Sold</Text>
         </Flex>
       </CardBody>
     </Card>
