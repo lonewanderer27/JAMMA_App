@@ -31,7 +31,7 @@ export default function ProductDetail() {
       <>
         <XlProductCard {...product!} />
         <Skeletn loading={reviews.isLoading} skeletonProps={{width: '100%'}}>
-          {<Text>Average Rating: {averageRating}</Text>}
+          <Text marginY={2}>Average Rating: {averageRating}</Text>
           <Reviews reviews={reviews.data as unknown as Review[]} />
         </Skeletn>
       </>
