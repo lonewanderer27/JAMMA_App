@@ -6,7 +6,7 @@ export default function SmProductCardGrid(props: {
   products: Product[] | undefined
 }) {
   return (
-    <SimpleGrid columns={{base: 2, sm: 3, lg: 5, xl: 6}} gap={5}>
+    <SimpleGrid columns={{base: 1, sm: 2, md: 3, lg: 4, xl: 5}} gap={5}>
       {props.products != undefined && props.products.map((product) => (
         <SmProductCard key={product.id} {...product} />
       ))}
