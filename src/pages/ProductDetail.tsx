@@ -27,6 +27,13 @@ export default function ProductDetail() {
     setDisplayAllReviews(!displayAllReviews);
   }
 
+  const generateProgressVal = (rating: number) => {
+    if (reviews.data == undefined || reviews.data.find((review) => review.product_rating === rating) === undefined) {
+      return 0
+    }
+    return reviews.data.filter((review) => review.product_rating === rating).length / reviews.data.length * 100
+  }
+
   if (productError || productLoading || product === null) {
     return (
       <>
@@ -87,23 +94,23 @@ export default function ProductDetail() {
                 <Flex gap={4} alignItems='center'>
                   <Stack textAlign={'center'}>
                     <Heading size='2xl'>{averageRating}</Heading>
-                    <Text>{reviews.data?.length} Rating{reviews.data?.length > 1 ?? 's'}</Text>
+                    <Text>{reviews.data?.length} Rating{reviews.data?.length > 1 ? 's' : ''}</Text>
                   </Stack>
                   <Stack gap={0}>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>5 ⭐</Text><Progress value={100} size='md' width='100px'/>
+                      <Text mr={2}>5 ⭐</Text><Progress value={generateProgressVal(5)} size='md' width='100px'/>
                     </Flex>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>4 ⭐</Text><Progress value={75} size='md' width='100px'/>
+                      <Text mr={2}>4 ⭐</Text><Progress value={generateProgressVal(4)} size='md' width='100px'/>
                     </Flex>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>3 ⭐</Text><Progress value={50} size='md' width='100px'/>
+                      <Text mr={2}>3 ⭐</Text><Progress value={generateProgressVal(3)} size='md' width='100px'/>
                     </Flex>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>2 ⭐</Text><Progress value={25} size='md' width='100px'/>
+                      <Text mr={2}>2 ⭐</Text><Progress value={generateProgressVal(2)} size='md' width='100px'/>
                     </Flex>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>1 ⭐</Text><Progress value={0} size='md' width='100px'/>
+                      <Text mr={2}>1 ⭐</Text><Progress value={generateProgressVal(1)} size='md' width='100px'/>
                     </Flex>
                   </Stack>
                 </Flex>

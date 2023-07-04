@@ -9,7 +9,7 @@ import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
 
 export const useReview = (id: string) => {
   const [averageRating, setAverageRating] = useState(() => 0);
-  const { data: productReviews, error: reviewsError, isLoading: reviewsLoading } = useQuery(
+  const { data: productReviews, error: reviewsError, isLoading: reviewsLoading, count } = useQuery(
     getReviews(id),
     {
       revalidateOnFocus: false,
@@ -29,6 +29,7 @@ export const useReview = (id: string) => {
 
   return {
     reviews: {
+      count,
       data: productReviews,
       error: reviewsError,
       isLoading: reviewsLoading
