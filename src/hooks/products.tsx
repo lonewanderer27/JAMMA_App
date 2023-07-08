@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { errorState, loadingState } from "../atoms/atoms";
 import { productState, productsState } from "../atoms/products";
 import { Categories } from "../types/jamma";
-import { fetchProduct, getReviews } from "../utils/products";
+import { fetchProduct, getReviewStats, getReviews } from "../utils/products";
 import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
 
 export const useReview = (id: string) => {
@@ -16,11 +16,23 @@ export const useReview = (id: string) => {
       revalidateOnReconnect: false,
     }
   )
+  const { data: stats, error: errorStats, isLoading: isLoadingStats } = useQuery(
+    getReviewStats(Number(id)),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
 
   useEffect(() => {
     if (productReviews != undefined) {
       setAverageRating(
-        Math.round(productReviews.reduce((acc, cur) => acc + cur.product_rating, 0) / productReviews.length)
+        Number(
+          (
+            productReviews.reduce((acc, cur) => acc + cur.product_rating, 0) / productReviews.length
+          )
+            .toFixed(1)
+        )
       );
     } else {
       setAverageRating(0);
@@ -33,6 +45,11 @@ export const useReview = (id: string) => {
       data: productReviews,
       error: reviewsError,
       isLoading: reviewsLoading
+    },
+    stats: {
+      data: stats,
+      error: errorStats,
+      isLoading: isLoadingStats
     },
     averageRating
   }

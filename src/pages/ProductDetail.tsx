@@ -19,7 +19,7 @@ export default function ProductDetail() {
   const { data: product, 
           error: productError, 
           isLoading: productLoading } = useProduct(product_id!);
-  const { reviews, averageRating } = useReview(product_id!);
+  const { reviews, averageRating, stats } = useReview(product_id!);
   const [localCart, setLocalCart] = useRecoilState(cartAtom);
   const [displayAllReviews, setDisplayAllReviews] = useState(false);
 
@@ -27,11 +27,27 @@ export default function ProductDetail() {
     setDisplayAllReviews(!displayAllReviews);
   }
 
+  console.log("stats")
+  console.log(stats)
+
   const generateProgressVal = (rating: number) => {
-    if (reviews.data == undefined || reviews.data.find((review) => review.product_rating === rating) === undefined) {
+    if (stats.data == undefined || stats.data[0].total_reviews == 0) {
       return 0
     }
-    return reviews.data.filter((review) => review.product_rating === rating).length / reviews.data.length * 100
+    switch (rating) {
+      case 5:
+        return stats.data[0].rating_5 / stats.data[0].total_reviews * 100
+      case 4:
+        return stats.data[0].rating_4 / stats.data[0].total_reviews * 100
+      case 3:
+        return stats.data[0].rating_3 / stats.data[0].total_reviews * 100
+      case 2:
+        return stats.data[0].rating_2 / stats.data[0].total_reviews * 100
+      case 1:
+        return stats.data[0].rating_1 / stats.data[0].total_reviews * 100
+      default:
+        return 0
+    }
   }
 
   if (productError || productLoading || product === null) {
@@ -91,29 +107,29 @@ export default function ProductDetail() {
               { (reviews.data != undefined && 
                 reviews.data!.length != 0) ? 
               <CardBody>
-                <Flex gap={4} alignItems='center'>
+                {stats.data != undefined && <Flex gap={4} alignItems='center'>
                   <Stack textAlign={'center'}>
-                    <Heading size='2xl'>{averageRating}</Heading>
-                    <Text>{reviews.data?.length} Rating{reviews.data?.length > 1 ? 's' : ''}</Text>
+                    <Heading size='2xl'>{stats.data[0].average_rating}</Heading>
+                    <Text>{stats.data[0].total_reviews} Rating{stats.data[0].total_reviews > 1 ? 's' : ''}</Text>
                   </Stack>
                   <Stack gap={0}>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>5 ⭐</Text><Progress value={generateProgressVal(5)} size='md' width='100px'/>
+                      <Text mr={2}>5 ⭐</Text><Progress value={generateProgressVal(5)} size='md' width='120px'/>
                     </Flex>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>4 ⭐</Text><Progress value={generateProgressVal(4)} size='md' width='100px'/>
+                      <Text mr={2}>4 ⭐</Text><Progress value={generateProgressVal(4)} size='md' width='120px'/>
                     </Flex>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>3 ⭐</Text><Progress value={generateProgressVal(3)} size='md' width='100px'/>
+                      <Text mr={2}>3 ⭐</Text><Progress value={generateProgressVal(3)} size='md' width='120px'/>
                     </Flex>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>2 ⭐</Text><Progress value={generateProgressVal(2)} size='md' width='100px'/>
+                      <Text mr={2}>2 ⭐</Text><Progress value={generateProgressVal(2)} size='md' width='120px'/>
                     </Flex>
                     <Flex alignItems={'center'}>
-                      <Text mr={2}>1 ⭐</Text><Progress value={generateProgressVal(1)} size='md' width='100px'/>
+                      <Text mr={2}>1 ⭐</Text><Progress value={generateProgressVal(1)} size='md' width='120px'/>
                     </Flex>
                   </Stack>
-                </Flex>
+                </Flex>}
                 {displayAllReviews ? <Reviews reviews={reviews.data as unknown as Review[]} /> : 
                 <ReviewItem {...reviews.data[0]} />}
                 {reviews.data.length > 1 && 

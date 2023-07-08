@@ -69,3 +69,9 @@ export const getReviews = (product_id: number | string) => {
 export const getAverageRating = (product_id: number) => {
   return client.rpc('get_average_rating', { product_id });
 }
+
+export const getReviewStats = (product_id: number) => {
+  // Fetch the reviews data from Supabase
+  return client
+    .rpc('get_product_review_stats', { product_id })
+};
