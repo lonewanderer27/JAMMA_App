@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
   Button,
   Card,
   CardBody,
@@ -14,27 +8,22 @@ import {
   CardHeader,
   Divider,
   Flex,
-  Grid,
-  GridItem,
   Heading,
   Image,
   Progress,
   Stack,
-  StackDivider,
   Text,
 } from "@chakra-ui/react";
-import { useParams, useSearchParams } from "react-router-dom";
 import { useProduct, useReview } from "../hooks/products";
 
 import Loading from "../components/Loading";
 import { Review } from "../types/jamma";
 import ReviewItem from "../components/Reviews/ReviewItem";
 import Reviews from "../components/Reviews";
-import Skeletn from "../components/Loading2";
-import XlProductCard from "../components/ProductCards/XlProductCard";
 import { addToCart } from "../utils/cart";
 import { cartAtom } from "../atoms/cart";
 import { phpString } from "../utils/phpString";
+import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
 
@@ -45,7 +34,7 @@ export default function ProductDetail() {
     error: productError,
     isLoading: productLoading,
   } = useProduct(product_id!);
-  const { reviews, averageRating, stats } = useReview(product_id!);
+  const { reviews, stats } = useReview(product_id!);
   const [localCart, setLocalCart] = useRecoilState(cartAtom);
   const [displayAllReviews, setDisplayAllReviews] = useState(false);
 

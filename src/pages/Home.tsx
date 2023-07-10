@@ -1,13 +1,6 @@
 import '../App.css'
 
-import { Box, Heading, Image } from "@chakra-ui/react";
-
-import { Product } from "../types/jamma";
-import Skeletn from "../components/Loading2";
-import SmProductCardGrid from "../components/ProductCards/SmProductCardGrid";
-import SmProductCardsLoader from "../components/Loaders/SmProductCardsLoader";
-import slogan_w_motto from "../assets/slogan_w_motto.png";
-import { useProducts } from "../hooks/products";
+import { Box } from "@chakra-ui/react";
 
 export default function Home() {
   // const { data: products, isLoading, error } = useProducts();

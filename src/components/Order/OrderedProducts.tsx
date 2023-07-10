@@ -1,10 +1,20 @@
-import { Card, CardBody, Table, TableContainer, Thead, Tr, Text, Tbody, Td } from "@chakra-ui/react";
+import {
+  Card,
+  CardBody,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Thead,
+} from "@chakra-ui/react";
 import { OrderType, Product } from "../../types/jamma";
+
 import OrderedProduct from ".././Order/OrderedProduct";
 
 export default function OrderedProducts(props: {
-  order: OrderType,
-  orderedProducts: Product[]
+  order: OrderType;
+  orderedProducts: Product[];
 }) {
   return (
     <Card>
@@ -30,22 +40,24 @@ export default function OrderedProducts(props: {
             </Thead>
             <Tbody>
               {props.order.products.products.map((product) => {
-                const orderedProduct = props.orderedProducts.find((orderedProduct) => orderedProduct.id === product.product_id);
+                const orderedProduct = props.orderedProducts.find(
+                  (orderedProduct) => orderedProduct.id === product.product_id
+                );
                 if (!orderedProduct) {
                   return null;
                 }
                 return (
-                  <OrderedProduct 
-                    key={orderedProduct.id} 
-                    product={orderedProduct} 
+                  <OrderedProduct
+                    key={orderedProduct.id}
+                    product={orderedProduct}
                     quantity={product.quantity}
                   />
-                )
+                );
               })}
             </Tbody>
           </Table>
         </TableContainer>
       </CardBody>
     </Card>
-  )
+  );
 }

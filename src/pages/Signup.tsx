@@ -1,37 +1,38 @@
-import {Link} from 'react-router-dom';
-import { credInputState } from '../atoms/atoms';
-import { useRecoilState } from 'recoil';
-import Navbar from "../components/Navbar";
-import '../App.css' 
-import { addUser } from '../utils/user';
-import { Input, Button, Stack, Heading } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import "../App.css";
 
-export default function Signup(){
+import { Button, Heading, Input, Stack } from "@chakra-ui/react";
+
+import { Link } from "react-router-dom";
+import { addUser } from "../utils/user";
+import { credInputState } from "../atoms/atoms";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+
+export default function Signup() {
   const [credInput, setCredInput] = useRecoilState(credInputState);
 
-  function handleChange (e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setCredInput({
       ...credInput,
-      [e.target.name]: e.target.value
-    })
+      [e.target.name]: e.target.value,
+    });
   }
 
-  async function handleSubmit(){
-    const {data, error} = await addUser(credInput);
+  async function handleSubmit() {
+    const { data, error } = await addUser(credInput);
 
     if (error) {
-      console.log(error)
-      alert(error.message)
+      console.log(error);
+      alert(error.message);
     } else {
-      console.log(data)
-      alert("Please check your email for the confirmation link")
+      console.log(data);
+      alert("Please check your email for the confirmation link");
     }
   }
 
   useEffect(() => {
-    document.title = "Signup"
-  }, [])
+    document.title = "Signup";
+  }, []);
 
   return (
     <div>
@@ -57,7 +58,9 @@ export default function Signup(){
         />
       </Stack>
       <Button onClick={() => handleSubmit()}>Signup</Button>
-      <Link to="/login"><Button>Login</Button></Link>
+      <Link to="/login">
+        <Button>Login</Button>
+      </Link>
     </div>
-  )
+  );
 }

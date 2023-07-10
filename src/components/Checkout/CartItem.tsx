@@ -1,29 +1,39 @@
-import { Button, ButtonGroup, Card, CardBody, CardFooter, Heading, Image, Stack, Text, IconButton, Checkbox } from "@chakra-ui/react";
-import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import {
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  Checkbox,
+  Heading,
+  IconButton,
+  Image,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import { addQuantity, checkItem, findCartItem } from "../../utils/cart";
+
 import { CartItemType } from "../../types/jamma";
-import { phpString } from "../../utils/phpString";
-import { useNavigate } from "react-router-dom";
-import { addQuantity, checkItem, findCartItem, removeFromCart } from "../../utils/cart";
-import { useRecoilState } from "recoil";
+import React from "React";
 import { cartAtom } from "../../atoms/cart";
+import { phpString } from "../../utils/phpString";
+import { useRecoilState } from "recoil";
 
 export default function CartItem(props: CartItemType) {
   const [localCart, setLocalCart] = useRecoilState(cartAtom);
   const cartItem = findCartItem(localCart, props.id);
 
-  const navigate = useNavigate();
-
-  function handleRemove() {
-    removeFromCart(localCart, setLocalCart, props.id);
-  }
+  // function handleRemove() {
+  //   removeFromCart(localCart, setLocalCart, props.id);
+  // }
 
   function handleAdd() {
-    addQuantity(localCart, setLocalCart, props.id, 1)
+    addQuantity(localCart, setLocalCart, props.id, 1);
   }
 
-  function handleMinus(){
+  function handleMinus() {
     if (cartItem!.quantity > 1) {
-      addQuantity(localCart, setLocalCart, props.id, -1)
+      addQuantity(localCart, setLocalCart, props.id, -1);
     }
   }
 
@@ -35,15 +45,14 @@ export default function CartItem(props: CartItemType) {
     return (
       <>
         <Card
-          direction={{base: 'column', sm: 'row'}}
-          overflow={'hidden'}
-          variant={'outline'}
-          size='sm'
+          direction={{ base: "column", sm: "row" }}
+          overflow={"hidden"}
+          variant={"outline"}
+          size="sm"
         >
-          
           <Checkbox
-            size='lg'
-            colorScheme='green'
+            size="lg"
+            colorScheme="green"
             isChecked={cartItem.checked}
             margin={3}
             onChange={() => handleCheck()}
@@ -51,57 +60,52 @@ export default function CartItem(props: CartItemType) {
           />
 
           <Image
-            objectFit='fill'
-            maxW={{sm:'150px'}}
-            maxH={{base:'50%', sm:'100px'}}
+            objectFit="fill"
+            maxW={{ sm: "150px" }}
+            maxH={{ base: "50%", sm: "100px" }}
             src={props.image_url}
           />
-    
+
           <Stack>
             <CardBody>
-              <Heading size='md'>{props.name}</Heading>
-              <Text>
-                Unit Price: {phpString.format(props.price)}
-              </Text>
-              <ButtonGroup 
-                size='xs' 
-                display="flex" 
-                alignItems={'center'}
+              <Heading size="md">{props.name}</Heading>
+              <Text>Unit Price: {phpString.format(props.price)}</Text>
+              <ButtonGroup
+                size="xs"
+                display="flex"
+                alignItems={"center"}
                 marginTop={5}
               >
                 <Text>Qty: </Text>
-                <IconButton 
+                <IconButton
                   aria-label="Minus"
-                  variant='solid' 
+                  variant="solid"
                   colorScheme="blue"
                   onClick={() => handleMinus()}
-                  icon={<MinusIcon/>}
+                  icon={<MinusIcon />}
                 />
-                <Text py='1'>{cartItem.quantity}</Text>
-                <IconButton 
+                <Text py="1">{cartItem.quantity}</Text>
+                <IconButton
                   aria-label="Add"
-                  variant='solid' 
+                  variant="solid"
                   colorScheme="blue"
                   onClick={() => handleAdd()}
-                  icon={<AddIcon/>}
+                  icon={<AddIcon />}
                 />
               </ButtonGroup>
-              <Text py='1'>
-                Subtotal Price: {phpString.format(props.subprice * cartItem.quantity)}
+              <Text py="1">
+                Subtotal Price:{" "}
+                {phpString.format(props.subprice * cartItem.quantity)}
               </Text>
             </CardBody>
-    
-            <CardFooter>
-              
-            </CardFooter>
+
+            <CardFooter></CardFooter>
           </Stack>
         </Card>
-        <Card>
-
-        </Card>
+        <Card></Card>
       </>
-    )
+    );
   } else {
-    return <></>
+    return <></>;
   }
 }

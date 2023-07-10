@@ -1,4 +1,3 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Card,
   CardBody,
@@ -36,11 +35,14 @@ import { DeliveryAddress, NewDeliveryAddress } from "../../types/jamma";
 import { sessionState } from "../../atoms/atoms";
 import { useRecoilValue } from "recoil";
 import AddressForm from "./AddressForm";
-import { checkoutPricesAtom, deliveryAddressesAtom } from "../../atoms/checkout";
+import {
+  checkoutPricesAtom,
+  deliveryAddressesAtom,
+} from "../../atoms/checkout";
 import { useCheckout } from "../../hooks/checkout";
-import Loading from "../Loading";
 import { useSetDefaultAddress } from "../../hooks/checkout";
 import { phpString } from "../../utils/phpString";
+import React from "react";
 
 export default function DeliveryAddress() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -71,11 +73,12 @@ export default function DeliveryAddress() {
         <ModalContent>
           <ModalHeader>New Address</ModalHeader>
           <ModalCloseButton />
-          <ModalBody display={'flex'} justifyContent='end' flexDirection='column'>
-            <AddressForm
-              data={newAddressState}
-              newAddress={true}
-            />
+          <ModalBody
+            display={"flex"}
+            justifyContent="end"
+            flexDirection="column"
+          >
+            <AddressForm data={newAddressState} newAddress={true} />
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -87,63 +90,71 @@ export default function DeliveryAddress() {
             Delivery Address
           </Heading>
         </CardHeader>
-        
+
         <CardBody>
           <Accordion allowToggle>
             <AccordionItem>
               <AccordionButton>
                 {/* There is no set default address but there are other addresses */}
-                {(!defaultAddress && addresses.length > 0) && 
-                <Text>There is no default address. Click here to set one now!</Text>}
+                {!defaultAddress && addresses.length > 0 && (
+                  <Text>
+                    There is no default address. Click here to set one now!
+                  </Text>
+                )}
 
                 {/* There are literally no addresses */}
-                {(!defaultAddress && addresses.length === 0) &&
-                <Button onClick={() => onOpen()}>Add Delivery Address</Button>}
+                {!defaultAddress && addresses.length === 0 && (
+                  <Button onClick={() => onOpen()}>Add Delivery Address</Button>
+                )}
 
-                {(defaultAddress) && 
-                <Flex 
-                  direction={'row'} 
-                  justifyContent={'space-between'} 
-                  width="100%"
-                  alignItems={'center'}
+                {defaultAddress && (
+                  <Flex
+                    direction={"row"}
+                    justifyContent={"space-between"}
+                    width="100%"
+                    alignItems={"center"}
                   >
-                  <Box width="100%">
-                    <Text fontWeight={'bold'} marginRight={'2'}>
-                      {defaultAddress.name} (+63) {defaultAddress.phone_number}
-                    </Text>
-                    <Text>
-                      {defaultAddress.address_line2}, {defaultAddress.barangay}, {defaultAddress.city}, {defaultAddress.province}, {defaultAddress.region} {defaultAddress.postal_code}
-                    </Text>
-                  </Box>
-                  <Button>
-                    <Text>
-                      Change
-                    </Text>
-                  </Button>
-                </Flex>}
+                    <Box width="100%">
+                      <Text fontWeight={"bold"} marginRight={"2"}>
+                        {defaultAddress.name} (+63){" "}
+                        {defaultAddress.phone_number}
+                      </Text>
+                      <Text>
+                        {defaultAddress.address_line2},{" "}
+                        {defaultAddress.barangay}, {defaultAddress.city},{" "}
+                        {defaultAddress.province}, {defaultAddress.region}{" "}
+                        {defaultAddress.postal_code}
+                      </Text>
+                    </Box>
+                    <Button>
+                      <Text>Change</Text>
+                    </Button>
+                  </Flex>
+                )}
               </AccordionButton>
               <AccordionPanel>
-                <Stack spacing={4} direction='row'>
+                <Stack spacing={4} direction="row">
                   <RadioGroup>
                     {addresses
-                      .filter(add => add._default === false)
+                      .filter((add) => add._default === false)
                       .map((add) => (
-                      <Radio 
-                        key={add.id}
-                        id={add.id.toString()} 
-                        value={add.id.toString()}
-                        onChange={() => handleChange(add.id)}
-                      >
-                        <Box>
-                          <Text fontWeight={'bold'} marginRight={'2'}>
-                            {add.name} (+63) {add.phone_number}
-                          </Text>
-                          <Text>
-                            {add.address_line2}, {add.barangay}, {add.city}, {add.province}, {add.region} {add.postal_code}
-                          </Text>
-                        </Box>
-                      </Radio>
-                    ))}
+                        <Radio
+                          key={add.id}
+                          id={add.id.toString()}
+                          value={add.id.toString()}
+                          onChange={() => handleChange(add.id)}
+                        >
+                          <Box>
+                            <Text fontWeight={"bold"} marginRight={"2"}>
+                              {add.name} (+63) {add.phone_number}
+                            </Text>
+                            <Text>
+                              {add.address_line2}, {add.barangay}, {add.city},{" "}
+                              {add.province}, {add.region} {add.postal_code}
+                            </Text>
+                          </Box>
+                        </Radio>
+                      ))}
                   </RadioGroup>
                 </Stack>
               </AccordionPanel>
@@ -157,9 +168,9 @@ export default function DeliveryAddress() {
                     <Box display="flex" alignItems="center">
                       <Text mr={5}>Message: </Text>
                       <Input
-                        value={checkout.message}
-                        onChange={checkout.messageChange} 
-                        placeholder="Leave message for the courier" 
+                        value={checkout.message ?? ""}
+                        onChange={checkout.messageChange}
+                        placeholder="Leave message for the courier"
                       />
                     </Box>
                   </Th>
@@ -173,7 +184,6 @@ export default function DeliveryAddress() {
             </Table>
           </TableContainer>
         </CardBody>
-        
       </Card>
     </Fade>
   );

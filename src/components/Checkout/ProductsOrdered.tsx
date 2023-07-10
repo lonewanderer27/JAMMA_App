@@ -1,10 +1,10 @@
-import { Card, CardBody, CardHeader, Heading, Table, TableContainer, Tbody, Text, Th, Thead, Tr, Image, Checkbox } from "@chakra-ui/react";
+import { Card, CardBody, CardHeader, Checkbox, Heading, Image, Table, TableContainer, Tbody, Text, Th, Thead, Tr } from "@chakra-ui/react";
+
+import CartCheckFill from "bootstrap-icons/icons/cart-check-fill.svg"
 import ProductItemList from "./ProductListItem";
 import { checkoutItemsAtom } from "../../atoms/checkout";
-import { useRecoilValue } from "recoil";
-import ListUl from "bootstrap-icons/icons/list-ul.svg"
-import CartCheckFill from "bootstrap-icons/icons/cart-check-fill.svg"
 import { useLocation } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 
 export default function ProductsOrdered() {
   const { pathname } = useLocation();

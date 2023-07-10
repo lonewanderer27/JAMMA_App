@@ -1,34 +1,31 @@
 import { Box, Button, Input, Stack, Text } from "@chakra-ui/react";
-import RadioCardGroup from "../RadioCardGroup";
+
 import { NewDeliveryAddress } from "../../types/jamma";
-import { useRecoilValue } from "recoil";
-import { sessionState } from "../../atoms/atoms";
-import { useFormState } from "../../hooks/form";
+import RadioCardGroup from "../RadioCardGroup";
 import { addNewAddress } from "../../utils/checkout";
+import { useFormState } from "../../hooks/form";
 
 export default function AddressForm(props: {
-  data: NewDeliveryAddress,
-  newAddress: boolean,
-}){
+  data: NewDeliveryAddress;
+  newAddress: boolean;
+}) {
   const { data } = props;
-  const session = useRecoilValue(sessionState);
 
   const {
-    formData: addressData, 
-    handleChange, 
-    resetForm, 
-    logFormData
-  } = useFormState(data, 'New Address Form');
+    formData: addressData,
+    handleChange,
+    resetForm,
+    logFormData,
+  } = useFormState(data, "New Address Form");
 
   logFormData();
 
   async function handleSubmit() {
-    const {data, error} = await addNewAddress(addressData);
+    const { data, error } = await addNewAddress(addressData);
 
     if (error) {
       console.log(error);
-    }
-    else {
+    } else {
       console.log(data);
     }
   }
@@ -92,10 +89,10 @@ export default function AddressForm(props: {
           name="label"
           options={["home", "work"]}
           default=""
-          onChange={value => handleChange({name: "label", newValue: value})}
+          onChange={(value) => handleChange({ name: "label", newValue: value })}
         />
       </Stack>
       <Button onClick={() => handleSubmit()}>Save</Button>
     </Box>
-  )
+  );
 }

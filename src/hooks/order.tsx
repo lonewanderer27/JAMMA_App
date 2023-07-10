@@ -7,7 +7,6 @@ import {
   getOrders,
 } from "../utils/order";
 import {
-  cartProductsAtom,
   checkoutItemsAtom,
   noteAtom,
   paymentOptionAtom,
@@ -15,8 +14,7 @@ import {
 } from "../atoms/checkout";
 import { checkoutPricesAtom, defaultAddressAtom } from "../atoms/checkout";
 import { errorState, loadingState, profileState } from "../atoms/atoms";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { useRef, useState } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import { cartAtom } from "../atoms/cart";
 import { deleteOrderedProducts } from "../utils/checkout";
@@ -24,6 +22,7 @@ import { orderAtom } from "../atoms/order";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
+import { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 
 export function useOrders() {
@@ -57,7 +56,7 @@ export function useOrders() {
 }
 
 export function useOrder(order_id: string, profile: Profile) {
-  const [orderAtomData, setOrderAtomData] = useRecoilState(orderAtom);
+  const setOrderAtomData = useSetRecoilState(orderAtom);
 
   const {
     data: order,
@@ -90,7 +89,7 @@ export function useOrder(order_id: string, profile: Profile) {
     if (order) {
       setOrderAtomData(order as unknown as OrderType);
     }
-  }, [order]);
+  }, [order, setOrderAtomData]);
 
   return {
     order: {
@@ -118,7 +117,6 @@ export function usePlaceOrder() {
   const message = useRecoilValue(noteAtom);
   const deliveryAddress = useRecoilValue(defaultAddressAtom);
   const [cart, setCart] = useRecoilState(cartAtom);
-  const [cartProducts, setCartProducts] = useRecoilState(cartProductsAtom);
   const { checkoutProducts } = useRecoilValue(checkoutItemsAtom);
   const [selectedVoucher, setSelectedVoucher] =
     useRecoilState(selectedVoucherAtom);
@@ -127,7 +125,6 @@ export function usePlaceOrder() {
   const profile = useRecoilValue(profileState);
 
   const toast = useToast();
-  const toastIdRef = useRef();
   const navigate = useNavigate();
 
   const [order, setOrder] = useRecoilState(orderAtom);
@@ -160,15 +157,17 @@ export function usePlaceOrder() {
           delivery_address: deliveryAddress!.id,
           products: {
             products: checkoutProducts.map((product) => {
+              const cartItem = cart.find(
+                (item) => item.product_id === product.id
+              );
               return {
                 product_id: product.id,
-                quantity: cart.find((item) => item.product_id === product.id)!
-                  .quantity,
+                quantity: cartItem ? cartItem.quantity : 0,
               };
             }),
           },
           voucher: selectedVoucher ? selectedVoucher.id : null,
-          total_payment: checkoutPrices!.totalPayment,
+          total_payment: checkoutPrices?.totalPayment,
           total_payment_discounted: checkoutPrices?.totalPaymentWithVoucher,
           merchandise_subtotal: checkoutPrices.merchandise_subtotal,
           payment_option: paymentOption!.id,

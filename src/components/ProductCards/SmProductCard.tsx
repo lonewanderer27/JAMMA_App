@@ -1,12 +1,10 @@
-import { Box, Card, CardBody, Flex, Image, Text } from "@chakra-ui/react";
+import { Card, CardBody, Flex, Image, Text } from "@chakra-ui/react";
 
 import { Product } from "../../types/jamma";
 import { phpString } from "../../utils/phpString";
 import { useNavigate } from "react-router-dom";
 
-export default function SmProductCard(
-  props: Product
-) {
+export default function SmProductCard(props: Product) {
   const navigate = useNavigate();
 
   function handleClick() {
@@ -14,21 +12,21 @@ export default function SmProductCard(
   }
 
   return (
-    <Card borderRadius='none' onClick={() => handleClick()} cursor="pointer">
+    <Card borderRadius="none" onClick={() => handleClick()} cursor="pointer">
       <Image
         src={props.image_url}
         alt={props.name}
-        objectFit='contain'
+        objectFit="contain"
         boxSize="170px"
         margin="auto"
       />
-      <CardBody padding="3" minH="80px" bg='gray.200'>
+      <CardBody padding="3" minH="80px" bg="gray.200">
         <Text>{props.name}</Text>
-        <Flex justifyContent={'space-between'} marginTop={5}>
+        <Flex justifyContent={"space-between"} marginTop={5}>
           <Text>{phpString.format(props.price)}</Text>
           <Text>{props.sales} Sold</Text>
         </Flex>
       </CardBody>
     </Card>
-  )
+  );
 }

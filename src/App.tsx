@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import About from "./pages/About";
 import Accessories from "./pages/Accessories";
@@ -76,4 +76,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

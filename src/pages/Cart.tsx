@@ -1,25 +1,41 @@
-import { Box, Button, Card, CardBody, CardFooter, Checkbox, Heading, Stack, Table, TableCaption, Tbody, Text, Th, Thead, Tr, useToast } from "@chakra-ui/react";
-import CartItem from "../components/Checkout/CartItem";
-import { useCart } from "../hooks/cart";
-import { Link } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Card,
+  CardFooter,
+  Checkbox,
+  Heading,
+  Stack,
+  Table,
+  TableCaption,
+  Tbody,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+} from "@chakra-ui/react";
 import { checkAllItems, countCart } from "../utils/cart";
-import { useState } from "react";
-import { cartAtom } from "../atoms/cart";
-import { useRecoilState } from "recoil";
+
+import { Link } from "react-router-dom";
 import ProductItemList from "../components/Checkout/ProductListItem";
+import { cartAtom } from "../atoms/cart";
+import { useCart } from "../hooks/cart";
+import { useRecoilState } from "recoil";
+import { useState } from "react";
 
 export default function Cart() {
   const { pathname } = location;
   const toast = useToast();
 
-  const { 
+  const {
     cart,
-    products, 
-    totalPrice, 
-    totalCount, 
+    products,
+    totalPrice,
+    totalCount,
     isAllChecked,
-    isLoading, 
-    error
+    isLoading,
+    error,
   } = useCart();
   const [localCart, setLocalCart] = useRecoilState(cartAtom);
   const [checkAll, setCheckAll] = useState(false);
@@ -33,17 +49,15 @@ export default function Cart() {
     return (
       <Box>
         <Heading>Your Cart</Heading>
-        {error && (
-          <Text>There has been error!</Text>
-        )}
-        {(isLoading === true && products.length === 0)&& (
+        {error && <Text>There has been error!</Text>}
+        {isLoading === true && products.length === 0 && (
           <Text>Loading your cart items</Text>
         )}
-        {(isLoading === false && cart.length === 0) && (
+        {isLoading === false && cart.length === 0 && (
           <Text>There are no items in your cart</Text>
         )}
       </Box>
-    )
+    );
   }
 
   function emptyCheckout() {
@@ -53,7 +67,7 @@ export default function Cart() {
         status: "error",
         duration: 3000,
         isClosable: true,
-      })
+      });
     }
   }
 
@@ -61,27 +75,24 @@ export default function Cart() {
 
   return (
     <Box>
-      <Table variant='striped'>
+      <Table variant="striped">
         <TableCaption>
-          <Heading>
-            {`Your cart ${cart.length == 0 ? "is empty" : ""}`}
-          </Heading>
+          <Heading>{`Your cart ${cart.length == 0 ? "is empty" : ""}`}</Heading>
         </TableCaption>
         <Thead>
           <Tr>
-            {pathname.includes("cart") &&
+            {pathname.includes("cart") && (
+              <Th>
+                <Checkbox
+                  checked={isAllChecked}
+                  size="lg"
+                  colorScheme="green"
+                  onChange={() => handleToggleCheckAll()}
+                />
+              </Th>
+            )}
             <Th>
-              <Checkbox 
-                checked={isAllChecked}
-                size='lg'
-                colorScheme='green'
-                onChange={() => handleToggleCheckAll()}
-              />
-            </Th>}
-            <Th>
-              <Text>
-                Name
-              </Text>
+              <Text>Name</Text>
             </Th>
             <Th>
               <Text>Unit Price</Text>
@@ -92,12 +103,11 @@ export default function Cart() {
             <Th>
               <Text>Item Subtotal</Text>
             </Th>
-            {pathname.includes("cart") &&
-            <Th>
-              <Text>
-                Actions
-              </Text>
-            </Th>}
+            {pathname.includes("cart") && (
+              <Th>
+                <Text>Actions</Text>
+              </Th>
+            )}
           </Tr>
         </Thead>
         <Tbody>
@@ -105,43 +115,39 @@ export default function Cart() {
             <ProductItemList key={product.id} {...product} />
           ))}
           <Tr>
-            <Th colSpan={4} textAlign={'end'}>
-              <Text>
-                Order Total: {totalCount}
-              </Text>
+            <Th colSpan={4} textAlign={"end"}>
+              <Text>Order Total: {totalCount}</Text>
             </Th>
             <Th colSpan={1}>
-              <Text>
-                {totalPrice}
-              </Text>
+              <Text>{totalPrice}</Text>
             </Th>
-            {pathname.includes("cart") && <Th colSpan={2}>
-              <Link to={totalCount > 0 ? "/checkout" : ""}>
-                <Button 
-                  size='lg' 
-                  variant='solid' 
-                  colorScheme={totalCount === 0 ? "gray" : "green"} 
-                  w="100%"
-                  onClick={() => emptyCheckout()}
-                >
-                  Checkout
-                </Button>
-              </Link> 
-            </Th>}
+            {pathname.includes("cart") && (
+              <Th colSpan={2}>
+                <Link to={totalCount > 0 ? "/checkout" : ""}>
+                  <Button
+                    size="lg"
+                    variant="solid"
+                    colorScheme={totalCount === 0 ? "gray" : "green"}
+                    w="100%"
+                    onClick={() => emptyCheckout()}
+                  >
+                    Checkout
+                  </Button>
+                </Link>
+              </Th>
+            )}
           </Tr>
         </Tbody>
       </Table>
       <Card
-        direction={{base: 'column', sm: 'row'}}
-        overflow={'hidden'}
-        variant={'solid'}
+        direction={{ base: "column", sm: "row" }}
+        overflow={"hidden"}
+        variant={"solid"}
       >
         <Stack>
-          <CardFooter>
-            
-          </CardFooter>
+          <CardFooter></CardFooter>
         </Stack>
       </Card>
     </Box>
-  )
+  );
 }

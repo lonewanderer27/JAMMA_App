@@ -8,7 +8,7 @@ import SmProductCardsLoader from "../components/Loaders/SmProductCardsLoader";
 import { useProducts } from "../hooks/products";
 
 export default function AllProducts() {
-  const { data: products, isLoading, error } = useProducts();
+  const { data: products, isLoading } = useProducts();
   document.title = "All Products - JAMMA";
 
   return (

@@ -1,7 +1,6 @@
 import { CategoriesID } from "../types/jamma";
 import { client } from "../client";
 import { getSession } from "./user";
-import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
 
 export const fetchRecentlyViewed = (user_id: string) => {
   return client.from("recently_viewed").select("*").eq("user_id", user_id);
