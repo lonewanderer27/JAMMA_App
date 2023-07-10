@@ -1,34 +1,37 @@
-import { Box,  Input, InputGroup, InputLeftElement, TabPanel } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
-import { useRecoilValue } from "recoil";
-import { ordersAtom } from "../../atoms/orders";
-import OrdersItem from "./OrdersItem";
+import {
+  Box,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  TabPanel,
+} from "@chakra-ui/react";
+
 import Loading from "../Loading";
+import OrdersItem from "./OrdersItem";
+import { SearchIcon } from "@chakra-ui/icons";
+import { useOrders } from "../../hooks/order";
 
 export default function AllOrders() {
-  const orders = useRecoilValue(ordersAtom);
-
-  if (orders.length != 0) {
-    console.log("Orders: ")
-    console.table(orders);
-  }
+  const { orders } = useOrders();
 
   return (
     <TabPanel>
       <Box>
-        <Loading loading={orders.length == 0}>
+        <Loading loading={orders.isLoading}>
           <InputGroup>
-            <InputLeftElement><SearchIcon/></InputLeftElement>
-            <Input 
-              variant="flushed" 
+            <InputLeftElement>
+              <SearchIcon />
+            </InputLeftElement>
+            <Input
+              variant="flushed"
               placeholder="You can search by Order ID or Product Name"
             />
           </InputGroup>
-          {orders.map(order => (
-            <OrdersItem key={order.id} {...order}/>
+          {orders.data.map((order) => (
+            <OrdersItem key={order.id} {...order} />
           ))}
         </Loading>
       </Box>
     </TabPanel>
-  )
+  );
 }

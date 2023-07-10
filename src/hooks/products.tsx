@@ -1,101 +1,100 @@
-import { useEffect, useState } from "react"
-import { client } from "../client";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { errorState, loadingState } from "../atoms/atoms";
-import { productState, productsState } from "../atoms/products";
-import { Categories } from "../types/jamma";
 import { fetchProduct, getReviewStats, getReviews } from "../utils/products";
+import { productState, productsState } from "../atoms/products";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import { Categories } from "../types/jamma";
+import { client } from "../client";
 import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
 
 export const useReview = (id: string) => {
   const [averageRating, setAverageRating] = useState(() => 0);
-  const { data: productReviews, error: reviewsError, isLoading: reviewsLoading, count } = useQuery(
-    getReviews(id),
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  )
-  const { data: stats, error: errorStats, isLoading: isLoadingStats } = useQuery(
-    getReviewStats(Number(id)),
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  )
+  const {
+    data: productReviews,
+    error: reviewsError,
+    isLoading: reviewsLoading,
+    count,
+  } = useQuery(getReviews(id), {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+  const {
+    data: stats,
+    error: errorStats,
+    isLoading: isLoadingStats,
+  } = useQuery(getReviewStats(Number(id)), {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   useEffect(() => {
     if (productReviews != undefined) {
       setAverageRating(
         Number(
           (
-            productReviews.reduce((acc, cur) => acc + cur.product_rating, 0) / productReviews.length
-          )
-            .toFixed(1)
+            productReviews.reduce((acc, cur) => acc + cur.product_rating, 0) /
+            productReviews.length
+          ).toFixed(1)
         )
       );
     } else {
       setAverageRating(0);
     }
-  }, [productReviews])
+  }, [productReviews]);
 
   return {
     reviews: {
       count,
       data: productReviews,
       error: reviewsError,
-      isLoading: reviewsLoading
+      isLoading: reviewsLoading,
     },
     stats: {
       data: stats,
       error: errorStats,
-      isLoading: isLoadingStats
+      isLoading: isLoadingStats,
     },
-    averageRating
-  }
-}
+    averageRating,
+  };
+};
 
 export const useProduct = (id: string) => {
   const [data, setData] = useRecoilState(productState);
-  const { data: productData, error, isLoading } = useQuery(
-    client
-      .from('products')
-      .select('*')
-      .eq('id', id)
-      .single(),
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  )
+  const {
+    data: productData,
+    error,
+    isLoading,
+  } = useQuery(client.from("products").select("*").eq("id", id).single(), {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   useEffect(() => {
     if (productData) {
       setData(productData);
     }
-  }, [productData])
+  }, [productData]);
 
   return {
     data,
     error,
-    isLoading
-  }
-}
+    isLoading,
+  };
+};
 
 export const useProducts = (
   ids?: string[] | number[],
   categoryId?: string[] | number[]
 ) => {
-  const query = client
-    .from('products')
-    .select('*');
+  const query = client.from("products").select("*");
 
   if (ids) {
-    query.in('id', ids);
+    query.in("id", ids);
   }
 
   if (categoryId) {
-    query.in('category_id', categoryId);
+    query.in("category_id", categoryId);
   }
 
   return useQuery(query, {
@@ -106,8 +105,8 @@ export const useProducts = (
 
 export const useFetchProducts = (category: Categories = Categories.All) => {
   const [data, setData] = useRecoilState(productsState);
-  const [error, setError] = useRecoilState(errorState)
-  const [isLoading, setIsLoading] = useRecoilState(loadingState)
+  const [error, setError] = useRecoilState(errorState);
+  const [isLoading, setIsLoading] = useRecoilState(loadingState);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,9 +116,9 @@ export const useFetchProducts = (category: Categories = Categories.All) => {
 
       if (category !== Categories.All) {
         const { data: categoryIdData, error: categoryIdError } = await client
-          .from('categories')
-          .select('id')
-          .eq('name', category)
+          .from("categories")
+          .select("id")
+          .eq("name", category)
           .single();
 
         if (categoryIdError) {
@@ -129,9 +128,9 @@ export const useFetchProducts = (category: Categories = Categories.All) => {
         categoryId = categoryIdData!.id;
 
         const { data: productsData, error: productsError } = await client
-        .from('products')
-        .select('*')
-        .eq('category_id', categoryId);
+          .from("products")
+          .select("*")
+          .eq("category_id", categoryId);
 
         if (productsError) {
           setError(productsError);
@@ -142,8 +141,8 @@ export const useFetchProducts = (category: Categories = Categories.All) => {
         setError(null);
       } else {
         const { data: productsData, error: productsError } = await client
-        .from('products')
-        .select('*');
+          .from("products")
+          .select("*");
 
         if (productsError) {
           setError(productsError);
@@ -154,13 +153,13 @@ export const useFetchProducts = (category: Categories = Categories.All) => {
         setError(null);
       }
       setIsLoading(false);
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
-  return {data, error, isLoading}
-}
+  return { data, error, isLoading };
+};
 
 export const useFetchProduct = (id: string) => {
   const products = useRecoilValue(productsState);
@@ -171,15 +170,15 @@ export const useFetchProduct = (id: string) => {
   useEffect(() => {
     const fetchData = async () => {
       const product = products.find((product) => product.id === parseInt(id));
-      
+
       // if we have the product in the products state, we can just set the data
       if (product != undefined) {
-        console.log("product found in products collection")
+        console.log("product found in products collection");
         setData(product);
         return;
       } else if (data?.id == parseInt(id)) {
         // if the product is already in the data state, we don't need to fetch it again
-        console.log("product found in product state")
+        console.log("product found in product state");
         return;
       } else if (data?.id != parseInt(id)) {
         setIsLoading(true);
@@ -191,10 +190,10 @@ export const useFetchProduct = (id: string) => {
         }
         setIsLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [id, products])
+    fetchData();
+  }, [id, products]);
 
-  return {data, error, isLoading}
-}
+  return { data, error, isLoading };
+};
