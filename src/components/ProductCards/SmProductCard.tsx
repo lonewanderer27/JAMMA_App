@@ -1,4 +1,5 @@
 import { Box, Card, CardBody, Flex, Image, Text } from "@chakra-ui/react";
+
 import { Product } from "../../types/jamma";
 import { phpString } from "../../utils/phpString";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +10,7 @@ export default function SmProductCard(
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate(`/product/${props.id}`);
+    navigate(`/product/${props.id}?unique_name=${props.unique_name}`);
   }
 
   return (
