@@ -55,7 +55,7 @@ export enum Categories {
   Headphone = "headphone",
   Storage = "storage",
   Accessory = "accessory",
-  Subscription = "subscription",
+  Softwares = "softwares",
   All = "",
 }
 
@@ -65,7 +65,7 @@ export enum CategoriesID {
   Headphone = 3,
   Storage = 4,
   Accessory = 5,
-  Subscription = 6,
+  Softwares = 6,
 }
 
 export interface CartItemType extends Product {

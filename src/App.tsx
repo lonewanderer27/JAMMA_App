@@ -23,6 +23,7 @@ import ProductDetail from "./pages/ProductDetail";
 import RecentlyViewed from "./pages/RecentlyViewed";
 import Signup from "./pages/Signup";
 import Smartwatch from "./pages/Smartwatch";
+import Softwares from "./pages/Softwares";
 import ToC from "./pages/ToC";
 import { sessionState } from "./atoms/atoms";
 import { useRecoilValue } from "recoil";
@@ -56,6 +57,7 @@ function App() {
               <Route path="/recently_viewed" element={<RecentlyViewed />} />
               <Route path="/checkout" element={<Checkout />} />
             </Route>
+            <Route path="/softwares" element={<Softwares />} />
             <Route path="/earphone" element={<Earphone />} />
             <Route path="/accessory" element={<Accessories />} />
             <Route path="/Smartwatch" element={<Smartwatch />} />

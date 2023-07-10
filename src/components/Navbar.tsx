@@ -29,8 +29,22 @@ import { Session } from "@supabase/supabase-js";
 import { cartAtom } from "../atoms/cart";
 import { countCart } from "../utils/cart";
 
-const Links = ["All Products", "Earphone", "Smartwatch", "Accessory", "About"];
-const RouteLinks = ["/all", "/earphone", "/smartwatch", "/accessory", "/about"];
+const Links = [
+  "All Products",
+  "Earphone",
+  "Smartwatch",
+  "Accessory",
+  "Softwares",
+  "About",
+];
+const RouteLinks = [
+  "/all",
+  "/earphone",
+  "/smartwatch",
+  "/accessory",
+  "/softwares",
+  "/about",
+];
 
 const NavLink = ({ children, to }: { children: ReactNode; to: string }) => (
   <Link
