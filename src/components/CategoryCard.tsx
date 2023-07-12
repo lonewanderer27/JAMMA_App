@@ -10,7 +10,12 @@ export default function CategoryCard(props: {
   const nav = useNavigate();
 
   return (
-    <Card borderRadius="0" onClick={() => nav(props.url)} width="100%">
+    <Card
+      borderRadius="0"
+      onClick={() => nav(props.url)}
+      width="100%"
+      cursor={"pointer"}
+    >
       <CardBody
         display={"flex"}
         justifyContent={"space-between"}
