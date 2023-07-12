@@ -1,14 +1,13 @@
 import { Box, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+
 import { Link } from "react-router-dom";
 
 export default function Footer(){
   return (
-    <Box textAlign={'center'} marginY={15}>
-      <SimpleGrid columns={3}>
+    <Box textAlign={"center"} marginY={15}>
+      <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={10}>
         <Stack>
-          <Heading size='sm'>
-            Customer Service
-          </Heading>
+          <Heading size="sm">Customer Service</Heading>
           <Text>Help Center</Text>
           <Text>Payment Methods</Text>
           <Text>Order Tracking</Text>
@@ -16,12 +15,10 @@ export default function Footer(){
           <Text>Contact Us</Text>
         </Stack>
         <Stack>
-          <Heading size='sm'>
-            About JAMMA
-          </Heading>
+          <Heading size="sm">About JAMMA</Heading>
           <Link to="/about">
             <Text>About Us</Text>
-          </Link> 
+          </Link>
           <Link to="/news">
             <Text>News</Text>
           </Link>
@@ -33,9 +30,7 @@ export default function Footer(){
           </Link>
         </Stack>
         <Stack>
-          <Heading size='sm'>
-            Follow Us
-          </Heading>
+          <Heading size="sm">Follow Us</Heading>
           <Text>Facebook</Text>
           <Text>Instagram</Text>
           <Text>Twitter</Text>
@@ -43,5 +38,5 @@ export default function Footer(){
         </Stack>
       </SimpleGrid>
     </Box>
-  )
+  );
 }
