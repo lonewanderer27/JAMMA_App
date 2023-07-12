@@ -14,7 +14,6 @@ import {
 import { addQuantity, checkItem, findCartItem } from "../../utils/cart";
 
 import { CartItemType } from "../../types/jamma";
-import React from "React";
 import { cartAtom } from "../../atoms/cart";
 import { phpString } from "../../utils/phpString";
 import { useRecoilState } from "recoil";
@@ -32,7 +31,7 @@ export default function CartItem(props: CartItemType) {
   }
 
   function handleMinus() {
-    if (cartItem!.quantity > 1) {
+    if (cartItem != undefined && cartItem?.quantity > 1) {
       addQuantity(localCart, setLocalCart, props.id, -1);
     }
   }

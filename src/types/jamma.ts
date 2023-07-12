@@ -73,7 +73,7 @@ export interface CartItemType extends Product {
   subprice: number;
 }
 
-export interface LoadingProps<T> {
+export interface LoadingProps {
   loading?: boolean;
   fullScreen?: boolean;
   component?: boolean;

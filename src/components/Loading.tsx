@@ -12,12 +12,12 @@ import { CircularProgress, Modal, ModalContent, Text } from "@chakra-ui/react";
 import { LoadingProps } from "../types/jamma";
 import { Suspense } from "react";
 
-export default function Loading<T>({
+export default function Loading({
   children,
   loading,
   fullScreen,
   circle,
-}: LoadingProps<T>) {
+}: LoadingProps) {
   const { onClose } = useDisclosure();
 
   const fullScreenLoader = () => {

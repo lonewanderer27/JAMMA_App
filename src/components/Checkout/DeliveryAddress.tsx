@@ -42,7 +42,6 @@ import {
 import { useCheckout } from "../../hooks/checkout";
 import { useSetDefaultAddress } from "../../hooks/checkout";
 import { phpString } from "../../utils/phpString";
-import React from "react";
 
 export default function DeliveryAddress() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -63,7 +62,7 @@ export default function DeliveryAddress() {
     phone_number: "",
     label: "",
     country: "Philippines",
-    user_id: session!.user.id,
+    user_id: session?.user.id ?? "0",
   };
 
   return (
