@@ -2,7 +2,7 @@ import {
   Avatar,
   Box,
   BoxProps,
-  Button,
+  Flex,
   Input,
   InputGroup,
   InputLeftElement,
@@ -15,13 +15,10 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import EmojiPicker, {
-  Emoji,
-  EmojiClickData,
-  EmojiStyle,
-} from "emoji-picker-react";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react";
+import { useEffect, useRef } from "react";
 
+import SendIcon from "../../assets/send.svg";
 import Skeletn from "../Loading2";
 import SuperchatsMessage from "./message";
 import { profileState } from "../../atoms/atoms";
@@ -29,14 +26,18 @@ import { useRecoilValueLoadable } from "recoil";
 import { useSuperchats } from "../../hooks/superchats";
 
 const AlwaysScrollToBottom = () => {
-  const elementRef = useRef();
-  useEffect(() => elementRef.current.scrollIntoView({ behavior: "smooth" }));
+  const elementRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (elementRef.current != undefined) {
+      elementRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  });
   return <div ref={elementRef} />;
 };
 
 export default function Superchats(boxProps?: BoxProps) {
   const profile = useRecoilValueLoadable(profileState);
-  const { superchats, message, setMessage, handleChange, handleEnter } =
+  const { superchats, message, setMessage, handleChange, handleEnter, send } =
     useSuperchats();
 
   function emojiClick(emojiData: EmojiClickData) {
@@ -81,19 +82,26 @@ export default function Superchats(boxProps?: BoxProps) {
             value={message}
             onKeyUp={handleEnter}
           />
-          <InputRightElement>
-            <Popover>
-              <PopoverTrigger>
-                <Text cursor={"pointer"}>😀</Text>
-              </PopoverTrigger>
-              <PopoverContent>
-                <EmojiPicker
-                  onEmojiClick={emojiClick}
-                  autoFocusSearch={true}
-                  emojiStyle={EmojiStyle.APPLE}
-                />
-              </PopoverContent>
-            </Popover>
+          <InputRightElement width="60px">
+            <Flex width="100%" justifyContent="space-between" paddingX="2">
+              <img
+                src={SendIcon}
+                onClick={() => send()}
+                style={{ cursor: "pointer" }}
+              />
+              <Popover>
+                <PopoverTrigger>
+                  <Text cursor={"pointer"}>😀</Text>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <EmojiPicker
+                    onEmojiClick={emojiClick}
+                    autoFocusSearch={true}
+                    emojiStyle={EmojiStyle.APPLE}
+                  />
+                </PopoverContent>
+              </Popover>
+            </Flex>
           </InputRightElement>
         </InputGroup>
       </Box>

@@ -1,5 +1,5 @@
-import { MutableRefObject, RefObject, useEffect, useState } from "react";
 import { insertGlobalChat, insertGlobalChatAnon } from "../utils/superchats";
+import { useEffect, useState } from "react";
 
 import { Superchats } from "../types/jamma";
 import { client } from "../client";
@@ -17,18 +17,22 @@ export function useSuperchats() {
 
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
-      if (profile.contents != undefined) {
-        (async () => {
-          await insertGlobalChat(profile.contents, message);
-          setMessage("");
-        })();
-      }
-      if (profile.contents == undefined) {
-        (async () => {
-          await insertGlobalChatAnon(message);
-          setMessage("");
-        })();
-      }
+      send();
+    }
+  };
+
+  const send = () => {
+    if (profile.contents != undefined) {
+      (async () => {
+        await insertGlobalChat(profile.contents, message);
+        setMessage("");
+      })();
+    }
+    if (profile.contents == undefined) {
+      (async () => {
+        await insertGlobalChatAnon(message);
+        setMessage("");
+      })();
     }
   };
 
@@ -68,5 +72,6 @@ export function useSuperchats() {
     message,
     handleChange,
     handleEnter,
+    send,
   };
 }
