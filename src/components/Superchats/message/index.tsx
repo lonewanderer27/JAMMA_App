@@ -13,7 +13,7 @@ export default function SuperchatsMessage(props: { message: Superchats }) {
   return (
     <Skeletn loading={profile.state == "loading" || isLoading}>
       <Flex width="98%">
-        <Flex width="100px" justifyContent={"left"}>
+        <Flex minWidth="150px" justifyContent={"left"}>
           {/* authenticated user */}
           {data != undefined && isLoading == false && (
             <Flex justifyContent={"left"}>
