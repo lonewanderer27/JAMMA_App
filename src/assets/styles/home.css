@@ -1,5 +1,5 @@
 .image-gallery-slides, .image-gallery-image {
-    max-width: 711px !important;
+    /* min-width: 711px !important; */
     height: 400px !important;
     object-fit: cover !important;
 }

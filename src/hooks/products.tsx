@@ -1,12 +1,31 @@
+import { Categories, CategoriesID } from "../types/jamma";
 import { errorState, loadingState } from "../atoms/atoms";
-import { fetchProduct, getReviewStats, getReviews } from "../utils/products";
+import {
+  fetchNewProducts,
+  fetchProduct,
+  getReviewStats,
+  getReviews,
+} from "../utils/products";
 import { productState, productsState } from "../atoms/products";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
-import { Categories } from "../types/jamma";
 import { client } from "../client";
 import { useQuery } from "@supabase-cache-helpers/postgrest-swr";
+
+export const useNewProducts = () => {
+  const earphones = useQuery(fetchNewProducts(CategoriesID.Earphone, 4), {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+
+  const smartwatch = useQuery(fetchNewProducts(CategoriesID.Smartwatch, 4), {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+
+  return { earphones, smartwatch };
+};
 
 export const useReview = (id: string) => {
   const [averageRating, setAverageRating] = useState(() => 0);

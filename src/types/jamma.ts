@@ -28,6 +28,7 @@ export type DeliveryStatus =
 export type OrderStatus = Database["public"]["Tables"]["orders_status"]["Row"];
 export type RecentlyViewed =
   Database["public"]["Tables"]["recently_viewed"]["Row"];
+export type Superchats = Database["public"]["Tables"]["superchats"]["Row"];
 
 export type NewDeliveryAddress = {
   address_line2: string;

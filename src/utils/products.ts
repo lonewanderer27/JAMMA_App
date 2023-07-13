@@ -14,6 +14,20 @@ export const fetchRecentProducts = (ids: string[]) => {
   return client.from("products").select("*").in("id", ids);
 };
 
+export const fetchNewProducts = (category?: CategoriesID, limit = 5) => {
+  const cli = client
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (category) {
+    cli.eq("category_id", category);
+  }
+
+  return cli;
+};
+
 export const fetchProducts = (
   category?: CategoriesID,
   ids?: string[] | number[],
