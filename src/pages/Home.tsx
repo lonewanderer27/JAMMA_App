@@ -49,12 +49,12 @@ export default function Home() {
     },
     {
       original:
-        "https://snivqgzdabtawqfgptyd.supabase.co/storage/v1/object/public/superchats/slideshow/Giveaway_Instructions.mp4?t=2023-07-13T15%3A59%3A54.494Z",
+        "https://snivqgzdabtawqfgptyd.supabase.co/storage/v1/object/public/superchats/slideshow/Giveaway_Instructions.mp4?t=2023-07-13T17%3A35%3A44.327Z",
       renderItem: () => (
         <video
           autoPlay={true}
           loop={true}
-          src="https://snivqgzdabtawqfgptyd.supabase.co/storage/v1/object/public/superchats/slideshow/Giveaway_Instructions.mp4?t=2023-07-13T15%3A59%3A54.494Z"
+          src="https://snivqgzdabtawqfgptyd.supabase.co/storage/v1/object/public/superchats/slideshow/Giveaway_Instructions.mp4?t=2023-07-13T17%3A35%3A44.327Z"
         />
       ),
     },
