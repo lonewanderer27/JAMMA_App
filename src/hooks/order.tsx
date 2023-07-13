@@ -1,5 +1,6 @@
 import { OrderType, Profile } from "../types/jamma";
 import {
+  addInitialOrderStatus,
   addOrder,
   getDeliveryAddress,
   getOrder,
@@ -195,7 +196,7 @@ export function usePlaceOrder() {
             isClosable: true,
           });
         } else {
-          setOrder(data as unknown as OrderType);
+          const { data2, error2 } = await addInitialOrderStatus(data);
           setSuccess(true);
 
           // clear ordered products from the cart
