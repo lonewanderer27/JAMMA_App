@@ -28,11 +28,21 @@ import { useParams } from "react-router-dom";
 import { profileState } from "../../atoms/atoms";
 import DeliveryAddressLoader from "../Loaders/DeliveryAddressLoader";
 
+// function deliveryStatus(orderStatus: OrderStatus) {
+//   const status = deliveryStatuses;
+
+//   if (orderStatus.approved != undefined) {
+//     status[1].currentStep = true;
+//   }
+// }
+
 export function OrderStatus2() {
   const { order_id } = useParams<{ order_id: string }>();
   const profile = useRecoilValueLoadable(profileState);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { order, deliveryAddress } = useOrder(order_id!, profile.contents);
+  const { order, deliveryAddress } = useOrder(
+    order_id!,
+    profile.contents
+  );
 
   return (
     <Card>

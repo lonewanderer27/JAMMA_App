@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Text } from "@chakra-ui/react";
 
 import Skeletn from "../../Loading2";
 import { Superchats } from "../../../types/jamma";
@@ -8,7 +8,7 @@ import { useRecoilValueLoadable } from "recoil";
 
 export default function SuperchatsMessage(props: { message: Superchats }) {
   const profile = useRecoilValueLoadable(profileState);
-  const { data, error, isLoading } = useProfile(props.message!.profile);
+  const { data, isLoading } = useProfile(props.message.profile as string);
 
   return (
     <Skeletn loading={profile.state == "loading" || isLoading}>
@@ -19,8 +19,8 @@ export default function SuperchatsMessage(props: { message: Superchats }) {
             <Flex justifyContent={"left"}>
               <Avatar
                 mr="2.5"
-                name={data.username}
-                src={data.avatar_url}
+                name={data.username as string}
+                src={data.avatar_url as string}
                 size="xs"
               />
               <Text>{data.username}</Text>

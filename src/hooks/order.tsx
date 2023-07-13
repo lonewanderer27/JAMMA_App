@@ -128,7 +128,7 @@ export function usePlaceOrder() {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const [order, setOrder] = useRecoilState(orderAtom);
+  const [order] = useRecoilState(orderAtom);
 
   function handlePlaceOrder() {
     toast({
@@ -196,7 +196,7 @@ export function usePlaceOrder() {
             isClosable: true,
           });
         } else {
-          const { data2, error2 } = await addInitialOrderStatus(data);
+          await addInitialOrderStatus(data);
           setSuccess(true);
 
           // clear ordered products from the cart
