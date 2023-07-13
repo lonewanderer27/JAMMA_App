@@ -18,11 +18,17 @@ export default function CategoryCard(props: {
     >
       <CardBody
         display={"flex"}
-        justifyContent={"space-between"}
+        flexDirection={"column"}
+        justifyContent={"center"}
         alignContent={"center"}
       >
-        <Image src={props.image} fallbackSrc="https://via.placeholder.com/50" />
-        <Heading size="md" marginY={"auto"}>
+        <Image
+          boxSize="50px"
+          src={props.image}
+          fallbackSrc="https://via.placeholder.com/50"
+          margin="auto"
+        />
+        <Heading size="md" marginY={"auto"} textAlign="center">
           {props.title}
         </Heading>
       </CardBody>
