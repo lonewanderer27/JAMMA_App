@@ -11,9 +11,9 @@ import {
   SimpleGrid,
   VStack,
 } from "@chakra-ui/react";
+import ImageGallery, { ReactImageGalleryProps } from "react-image-gallery";
 
 import CategoryCard from "../components/CategoryCard";
-import ImageGallery from "react-image-gallery";
 import { Product } from "../types/jamma";
 import Superchats from "../components/Superchats";
 import XsProductCardGrid from "../components/ProductCards/XsProductCardGrid";
@@ -92,19 +92,20 @@ export default function Home() {
     },
   ];
 
-  const mainSlideshowProps = {
+  const mainSlideshowProps: ReactImageGalleryProps = {
     items: mainSlideshowImages,
-    showPlayButton: true,
     showFullscreenButton: false,
     showThumbnails: false,
     slideInterval: 3000,
+    autoPlay: true,
   };
 
-  const giveawaySlideshowProps = {
+  const giveawaySlideshowProps: ReactImageGalleryProps = {
     items: giveawaySlideshowImages,
-    showPlayButton: true,
     showThumbnails: false,
+    showFullscreenButton: false,
     slideInterval: 7000,
+    autoPlay: true,
   };
 
   const { earphones, smartwatch } = useNewProducts();
