@@ -53,6 +53,7 @@ export default function Home() {
       renderItem: () => (
         <video
           autoPlay={true}
+          loop={true}
           src="https://snivqgzdabtawqfgptyd.supabase.co/storage/v1/object/public/superchats/slideshow/Giveaway_Instructions.mp4?t=2023-07-13T15%3A59%3A54.494Z"
         />
       ),
@@ -98,6 +99,7 @@ export default function Home() {
     showThumbnails: false,
     slideInterval: 3000,
     autoPlay: true,
+    infinite: true,
   };
 
   const giveawaySlideshowProps: ReactImageGalleryProps = {
@@ -106,6 +108,7 @@ export default function Home() {
     showFullscreenButton: false,
     slideInterval: 7000,
     autoPlay: true,
+    infinite: true,
   };
 
   const { earphones, smartwatch } = useNewProducts();
