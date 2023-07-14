@@ -1,15 +1,21 @@
 import { Flex, HStack, Image, Text } from "@chakra-ui/react";
-import { downvote, unvote, upvote } from "../../utils/superchats";
+import { downvote, unvote } from "../../utils/superchats";
 import { useDownvote, useUpvote } from "../../hooks/superchats";
 
 import Flag from "bootstrap-icons/icons/flag.svg";
-import FlagFill from "bootstrap-icons/icons/flag-fill.svg";
 import HandThumbsDown from "bootstrap-icons/icons/hand-thumbs-down.svg";
 import HandThumbsDownFill from "bootstrap-icons/icons/hand-thumbs-down-fill.svg";
 import HandThumbsUp from "bootstrap-icons/icons/hand-thumbs-up.svg";
 import HandThumbsUpFill from "bootstrap-icons/icons/hand-thumbs-up-fill.svg";
-import Skeletn from "../Loading2";
 import { Superchats } from "../../types/jamma";
+
+// import FlagFill from "bootstrap-icons/icons/flag-fill.svg";
+
+
+
+
+// import Skeletn from "../Loading2";
+
 
 export function SuperchatActions(props: {
   message: Superchats;

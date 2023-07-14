@@ -16,7 +16,6 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react";
-import { useEffect, useRef } from "react";
 
 import SendIcon from "../../assets/send.svg";
 import Skeletn from "../Loading2";
@@ -25,15 +24,15 @@ import { profileState } from "../../atoms/atoms";
 import { useRecoilValueLoadable } from "recoil";
 import { useSuperchats } from "../../hooks/superchats";
 
-const AlwaysScrollToBottom = () => {
-  const elementRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (elementRef.current != undefined) {
-      elementRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  });
-  return <div ref={elementRef} />;
-};
+// const AlwaysScrollToBottom = () => {
+//   const elementRef = useRef<HTMLDivElement>(null);
+//   useEffect(() => {
+//     if (elementRef.current != undefined) {
+//       elementRef.current.scrollIntoView({ behavior: "smooth" });
+//     }
+//   });
+//   return <div ref={elementRef} />;
+// };
 
 export default function Superchats(boxProps?: BoxProps) {
   const profile = useRecoilValueLoadable(profileState);
