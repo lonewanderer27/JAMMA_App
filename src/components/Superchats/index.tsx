@@ -51,27 +51,43 @@ export default function Superchats(boxProps?: BoxProps) {
           maxH="xs"
           overflowY={"scroll"}
           justifyContent={"left"}
-          minW="700px"
-          gap={4}
+          minW="740px"
+          gap={6}
         >
           {superchats.map((message) => (
-            <SuperchatsMessage key={message.id} message={message} />
+            <SuperchatsMessage
+              enableActions={false}
+              key={"superchat:" + message.id}
+              message={message}
+              commentMode={false}
+            />
           ))}
-          <AlwaysScrollToBottom />
+          {superchats.length != 0 && <AlwaysScrollToBottom />}
         </VStack>
         <InputGroup mt="5">
-          <InputLeftElement>
+          <InputLeftElement width="100px">
             <Wrap>
               <WrapItem>
                 {profile.contents != undefined && (
-                  <Avatar
-                    name={profile.contents.username}
-                    src={profile.contents.avatar_url}
-                    size="xs"
-                  />
+                  <Flex ml="3">
+                    <Avatar
+                      name={profile.contents.username}
+                      src={profile.contents.avatar_url}
+                      size="xs"
+                      mr="2.5"
+                    />
+                    <Text color="gray.500" fontWeight={"semibold"}>
+                      {profile.contents.username}
+                    </Text>
+                  </Flex>
                 )}
                 {profile.contents == undefined && (
-                  <Avatar name="Anonymous" size="xs" />
+                  <Flex>
+                    <Avatar name="Anonymous" size="xs" mr="2.5" />
+                    <Text color="gray.500" fontWeight={"semibold"}>
+                      Anon
+                    </Text>
+                  </Flex>
                 )}
               </WrapItem>
             </Wrap>
@@ -81,6 +97,8 @@ export default function Superchats(boxProps?: BoxProps) {
             onChange={handleChange}
             value={message}
             onKeyUp={handleEnter}
+            pl="170px"
+            borderRadius={"none"}
           />
           <InputRightElement width="60px">
             <Flex width="100%" justifyContent="space-between" paddingX="2">
