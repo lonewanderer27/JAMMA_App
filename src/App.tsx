@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Earphone from "./pages/Earphone";
 import Footer from "./components/Footer";
+import Headphones from "./pages/Headphones";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Me from "./pages/Me";
@@ -57,6 +58,7 @@ function App() {
               <Route path="/recently_viewed" element={<RecentlyViewed />} />
               <Route path="/checkout" element={<Checkout />} />
             </Route>
+            <Route path="/headphone" element={<Headphones />} />
             <Route path="/softwares" element={<Softwares />} />
             <Route path="/earphone" element={<Earphone />} />
             <Route path="/accessory" element={<Accessories />} />

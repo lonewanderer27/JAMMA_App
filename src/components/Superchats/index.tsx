@@ -62,7 +62,7 @@ export default function Superchats(boxProps?: BoxProps) {
               commentMode={false}
             />
           ))}
-          {superchats.length != 0 && <AlwaysScrollToBottom />}
+          {/* {superchats.length != 0 && <AlwaysScrollToBottom />} */}
         </VStack>
         <InputGroup mt="5">
           <InputLeftElement width="100px">
