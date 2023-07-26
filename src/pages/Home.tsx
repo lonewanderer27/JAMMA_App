@@ -17,9 +17,11 @@ import CategoryCard from "../components/CategoryCard";
 import { Product } from "../types/jamma";
 import Superchats from "../components/Superchats";
 import XsProductCardGrid from "../components/ProductCards/XsProductCardGrid";
+import logo_loading from "../assets/logo_loading.png";
+import { memo } from "react";
 import { useNewProducts } from "../hooks/products";
 
-export default function Home() {
+function Home() {
   // const { data: products, isLoading, error } = useProducts();
   document.title = "JAMMA";
 
@@ -125,10 +127,12 @@ export default function Home() {
               <Image
                 style={{ height: "200px", objectFit: "cover" }}
                 src="https://snivqgzdabtawqfgptyd.supabase.co/storage/v1/object/public/home_slideshow/Headphone%20Banner.jpg"
+                fallbackSrc={logo_loading}
               />
               <Image
                 style={{ height: "200px", objectFit: "cover" }}
                 src="https://snivqgzdabtawqfgptyd.supabase.co/storage/v1/object/public/home_slideshow/Smartwatch%20Banner%202.jpg"
+                fallbackSrc={logo_loading}
               />
             </Flex>
           </GridItem>
@@ -176,3 +180,5 @@ export default function Home() {
     </Box>
   );
 }
+
+export default memo(Home);

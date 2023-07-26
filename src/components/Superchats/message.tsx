@@ -74,7 +74,7 @@ function SuperchatsMessage(props: {
                   src={data.avatar_url as string}
                   size="xs"
                 />
-                <Text color="gray.500" fontWeight={"semibold"}>
+                <Text color="gray.500" fontWeight={"semibold"} noOfLines={1}>
                   {data.username}
                 </Text>
               </Flex>
@@ -90,7 +90,7 @@ function SuperchatsMessage(props: {
             )}
           </Flex>
           <Flex ml="2.5">
-            <Text>{props.message.message}</Text>
+            <Text noOfLines={1}>{props.message.message}</Text>
           </Flex>
           <Flex ml="auto">
             <Text ml="10" color="gray.500" fontSize="xs">

@@ -1,12 +1,10 @@
 import { Card, CardBody, Heading, Image } from "@chakra-ui/react";
 
+import logo_loading from "../assets/logo_loading.png";
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function CategoryCard(props: {
-  title: string;
-  image?: string;
-  url: string;
-}) {
+function CategoryCard(props: { title: string; image?: string; url: string }) {
   const nav = useNavigate();
 
   return (
@@ -25,7 +23,7 @@ export default function CategoryCard(props: {
         <Image
           boxSize="50px"
           src={props.image}
-          fallbackSrc="https://via.placeholder.com/50"
+          fallbackSrc={logo_loading}
           margin="auto"
         />
         <Heading size="md" marginY={"auto"} textAlign="center">
@@ -35,3 +33,5 @@ export default function CategoryCard(props: {
     </Card>
   );
 }
+
+export default memo(CategoryCard);
