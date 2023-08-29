@@ -1,10 +1,9 @@
-import * as dayjs from "dayjs";
-
 import { Avatar, Box, Flex, Text, VStack } from "@chakra-ui/react";
 
 import Skeletn from "../Loading2";
 import { SuperchatActions } from "./actions";
 import { Superchats } from "../../types/jamma";
+import dayjs from "dayjs";
 import { memo } from "react";
 import { profileState } from "../../atoms/atoms";
 import relativeTime from "dayjs/plugin/relativeTime";
